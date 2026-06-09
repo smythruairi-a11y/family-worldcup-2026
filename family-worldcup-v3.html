@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Family World Cup 2026 🏆</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #F5C518;
+    --green: #006747;
+    --dark: #0D1117;
+    --card: #161B22;
+    --card2: #1C2128;
+    --border: #30363D;
+    --text: #E6EDF3;
+    --muted: #8B949E;
+    --red: #DA3633;
+    --blue: #388BFD;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--dark); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; }
+
+  header {
+    background: linear-gradient(160deg, #003d29 0%, #006747 40%, #004d35 100%);
+    padding: 28px 20px 22px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::after {
+    content:''; position:absolute; bottom:0; left:0; right:0;
+    height:3px; background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .trophy { font-size:2.8rem; line-height:1; margin-bottom:4px; filter:drop-shadow(0 0 20px rgba(245,197,24,0.5)); }
+  header h1 {
+    font-family:'Bebas Neue',cursive;
+    font-size: clamp(2.2rem,9vw,4rem);
+    letter-spacing:5px; color:var(--gold); line-height:1;
+    text-shadow: 0 0 40px rgba(245,197,24,0.4);
+  }
+  header p { color:rgba(255,255,255,0.55); font-size:0.8rem; margin-top:5px; letter-spacing:3px; text-transform:uppercase; }
+  .dates-badge {
+    display:inline-block; margin-top:10px;
+    background:rgba(0,0,0,0.3); border:1px solid rgba(245,197,24,0.3);
+    border-radius:20px; padding:4px 14px;
+    font-size:0.75rem; color:rgba(255,255,255,0.7); letter-spacing:1px;
+  }
+
+  .filter-wrap { background:var(--card); border-bottom:1px solid var(--border); padding:12px 16px; }
+  .filter-label { font-size:0.68rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); margin-bottom:8px; }
+  .names { display:flex; flex-wrap:wrap; gap:6px; }
+  .name-btn {
+    padding:5px 13px; border-radius:20px; border:1px solid var(--border);
+    background:transparent; color:var(--muted); font-size:0.8rem;
+    font-family:'DM Sans',sans-serif; cursor:pointer; transition:all 0.15s; font-weight:500;
+  }
+  .name-btn:hover { border-color:var(--gold); color:var(--text); }
+  .name-btn.active { background:var(--gold); color:#000; border-color:var(--gold); font-weight:700; }
+
+  .tabs { display:flex; overflow-x:auto; background:var(--card2); border-bottom:1px solid var(--border); scrollbar-width:none; }
+  .tabs::-webkit-scrollbar { display:none; }
+  .tab {
+    flex:none; padding:13px 18px; font-size:0.78rem; font-weight:600;
+    color:var(--muted); cursor:pointer; white-space:nowrap;
+    border-bottom:2px solid transparent; transition:all 0.15s;
+    text-transform:uppercase; letter-spacing:0.8px;
+  }
+  .tab.active { color:var(--gold); border-bottom-color:var(--gold); }
+  .tab:hover:not(.active) { color:var(--text); }
+
+  .content { padding:14px; max-width:960px; margin:0 auto; }
+  .page { display:none; }
+  .page.active { display:block; }
+
+  .section-title {
+    font-family:'Bebas Neue',cursive; font-size:1.3rem; letter-spacing:3px;
+    color:var(--gold); margin:18px 0 12px; display:flex; align-items:center; gap:10px;
+  }
+  .section-title::after { content:''; flex:1; height:1px; background:var(--border); }
+
+  .match-day-label { font-size:0.7rem; text-transform:uppercase; letter-spacing:2px; color:var(--muted); margin:16px 0 8px; padding-left:2px; }
+  .match-card {
+    background:var(--card); border:1px solid var(--border); border-radius:10px;
+    padding:12px 14px; margin-bottom:8px; display:flex; align-items:center; gap:10px; transition:border-color 0.15s;
+  }
+  .match-card:hover { border-color:rgba(245,197,24,0.25); }
+  .match-card.highlight { border-color:var(--gold); background:rgba(245,197,24,0.04); }
+  .match-card.hidden { display:none; }
+  .match-time { font-size:0.72rem; color:var(--muted); min-width:42px; text-align:center; line-height:1.3; }
+  .match-body { flex:1; min-width:0; }
+  .teams-row { display:flex; align-items:center; gap:6px; font-weight:600; font-size:0.9rem; flex-wrap:wrap; }
+  .flag { font-size:1.1rem; }
+  .vs { color:var(--muted); font-size:0.7rem; }
+  .match-meta { margin-top:4px; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .group-pill { font-size:0.62rem; text-transform:uppercase; letter-spacing:1px; background:var(--dark); border:1px solid var(--border); border-radius:4px; padding:2px 6px; color:var(--muted); }
+  .owner-tag { font-size:0.68rem; font-weight:700; padding:2px 8px; border-radius:10px; }
+  .score-box { background:var(--dark); border:1px solid var(--border); border-radius:7px; padding:4px 10px; font-family:'Bebas Neue',cursive; font-size:1.1rem; letter-spacing:2px; min-width:58px; text-align:center; }
+  .score-box.live { border-color:var(--red); color:var(--red); }
+
+  /* owner colours — one per person */
+  .oc-danielle  { background:rgba(139,92,246,0.15); color:#a78bfa; }
+  .oc-jim       { background:rgba(245,158,11,0.15); color:#fbbf24; }
+  .oc-jose      { background:rgba(16,185,129,0.15); color:#34d399; }
+  .oc-julia     { background:rgba(236,72,153,0.15); color:#f472b6; }
+  .oc-noudliz   { background:rgba(99,102,241,0.15); color:#818cf8; }
+  .oc-piet      { background:rgba(239,68,68,0.15);  color:#f87171; }
+  .oc-ruairi    { background:rgba(245,197,24,0.15);  color:#F5C518; }
+  .oc-saskia    { background:rgba(20,184,166,0.15);  color:#2dd4bf; }
+  .oc-sharice   { background:rgba(249,115,22,0.15);  color:#fb923c; }
+  .oc-sjoerd    { background:rgba(56,189,248,0.15);  color:#38bdf8; }
+  .oc-wouter    { background:rgba(132,204,22,0.15);  color:#a3e635; }
+  .oc-zoe       { background:rgba(244,63,94,0.15);   color:#fb7185; }
+
+  .draw-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(195px,1fr)); gap:10px; }
+  .draw-card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:14px; transition:border-color 0.15s; }
+  .draw-card:hover { border-color:rgba(245,197,24,0.3); }
+  .draw-card.highlight { border-color:var(--gold); background:rgba(245,197,24,0.04); }
+  .draw-card.hidden { display:none; }
+  .draw-owner { font-weight:700; font-size:0.88rem; margin-bottom:10px; color:var(--gold); }
+  .team-row { display:flex; align-items:center; gap:7px; padding:4px 0; font-size:0.82rem; }
+  .tier-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; margin-left:auto; }
+  .t1{background:#F5C518;} .t2{background:#C0C0C0;} .t3{background:#CD7F32;} .t4{background:#555e6b;}
+
+  .standings-wrap { background:var(--card); border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+  .standings-table { width:100%; border-collapse:collapse; font-size:0.84rem; }
+  .standings-table th { padding:9px 12px; text-align:left; font-size:0.67rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); border-bottom:1px solid var(--border); background:var(--card2); }
+  .standings-table td { padding:10px 12px; border-bottom:1px solid rgba(48,54,61,0.5); vertical-align:middle; }
+  .standings-table tr:last-child td { border-bottom:none; }
+  .standings-table tr:hover td { background:rgba(255,255,255,0.02); }
+  .rank { font-family:'Bebas Neue',cursive; font-size:1rem; color:var(--muted); width:28px; }
+  .r1{color:#F5C518;} .r2{color:#C0C0C0;} .r3{color:#CD7F32;}
+  .sname { font-weight:600; }
+  .sflags { font-size:0.88rem; letter-spacing:1px; }
+  .active-badge { display:inline-block; padding:3px 9px; border-radius:12px; font-weight:700; font-size:0.78rem; background:rgba(0,103,71,0.4); color:#4ade80; border:1px solid rgba(0,103,71,0.6); }
+
+  .legend { display:flex; gap:14px; flex-wrap:wrap; font-size:0.73rem; color:var(--muted); margin-bottom:14px; }
+  .legend-item { display:flex; align-items:center; gap:5px; }
+  .ldot { width:8px; height:8px; border-radius:50%; }
+
+  .groups-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:10px; }
+  .group-card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:12px; }
+  .group-card h4 { font-family:'Bebas Neue',cursive; font-size:1rem; letter-spacing:2px; color:var(--gold); margin-bottom:8px; }
+  .group-team { display:flex; align-items:center; gap:8px; padding:5px 0; font-size:0.82rem; border-bottom:1px solid rgba(48,54,61,0.4); }
+  .group-team:last-child { border-bottom:none; }
+  .gt-owner { margin-left:auto; font-size:0.68rem; font-weight:700; padding:2px 7px; border-radius:8px; }
+
+  .bracket-msg { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:32px; text-align:center; }
+  .bracket-msg .icon { font-size:2.5rem; margin-bottom:12px; }
+  .bracket-msg h3 { font-family:'Bebas Neue',cursive; font-size:1.4rem; letter-spacing:2px; color:var(--text); margin-bottom:8px; }
+  .bracket-msg p { color:var(--muted); font-size:0.85rem; line-height:1.6; }
+
+  .info-bar { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px; padding:10px 14px; background:var(--card); border:1px solid var(--border); border-radius:8px; font-size:0.78rem; color:var(--muted); }
+  .live-pill { display:inline-flex; align-items:center; gap:5px; background:rgba(218,54,51,0.15); border:1px solid var(--red); border-radius:20px; padding:3px 10px; font-size:0.68rem; color:var(--red); font-weight:700; text-transform:uppercase; letter-spacing:1px; }
+  .live-dot { width:6px; height:6px; border-radius:50%; background:var(--red); animation:pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+
+  footer { text-align:center; padding:20px; color:var(--muted); font-size:0.73rem; border-top:1px solid var(--border); margin-top:24px; }
+  footer strong { color:var(--gold); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="trophy">🏆</div>
+  <h1>World Cup 2026</h1>
+  <p>Family Sweepstake · USA · Canada · Mexico</p>
+  <div class="dates-badge">11 June – 19 July 2026</div>
+</header>
+
+<div class="filter-wrap">
+  <div class="filter-label">Filter by owner</div>
+  <div class="names" id="nameButtons">
+    <button class="name-btn active" onclick="setFilter('all',this)">All</button>
+    <button class="name-btn" onclick="setFilter('Danielle',this)">Danielle</button>
+    <button class="name-btn" onclick="setFilter('Jim',this)">Jim</button>
+    <button class="name-btn" onclick="setFilter('Jose',this)">Jose</button>
+    <button class="name-btn" onclick="setFilter('Julia',this)">Julia</button>
+    <button class="name-btn" onclick="setFilter('Noud & Liz',this)">Noud & Liz</button>
+    <button class="name-btn" onclick="setFilter('Piet',this)">Piet</button>
+    <button class="name-btn" onclick="setFilter('Ruairi',this)">Ruairi</button>
+    <button class="name-btn" onclick="setFilter('Saskia',this)">Saskia</button>
+    <button class="name-btn" onclick="setFilter('Sharice',this)">Sharice</button>
+    <button class="name-btn" onclick="setFilter('Sjoerd',this)">Sjoerd</button>
+    <button class="name-btn" onclick="setFilter('Wouter',this)">Wouter</button>
+    <button class="name-btn" onclick="setFilter('Zoë',this)">Zoë</button>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('today',this)">Today's Games</div>
+  <div class="tab" onclick="showTab('draw',this)">The Draw</div>
+  <div class="tab" onclick="showTab('groups',this)">Groups</div>
+  <div class="tab" onclick="showTab('standings',this)">Standings</div>
+  <div class="tab" onclick="showTab('bracket',this)">Bracket</div>
+</div>
+
+<div class="content">
+
+<!-- TODAY -->
+<div id="today" class="page active">
+  <div class="info-bar">
+    <span class="live-pill"><span class="live-dot"></span>Live</span>
+    <span>Thursday 11 June 2026 · Group Stage Day 1</span>
+    <span style="margin-left:auto">Last updated 21:00 CET</span>
+  </div>
+
+  <div class="match-day-label">Opening Match · Estadio Azteca, Mexico City</div>
+
+  <div class="match-card" data-owners="Sharice">
+    <div class="match-time">21:00<br>CET</div>
+    <div class="match-body">
+      <div class="teams-row"><span class="flag">🇲🇽</span> Mexico <span class="vs">vs</span> <span class="flag">🇿🇦</span> South Africa</div>
+      <div class="match-meta">
+        <span class="group-pill">Group A</span>
+        <span class="owner-tag oc-sharice">Sharice</span>
+        <span class="owner-tag oc-noudliz">Noud & Liz</span>
+      </div>
+    </div>
+    <div class="score-box live">– · –</div>
+  </div>
+
+  <div class="match-day-label">Late · Estadio Akron, Guadalajara</div>
+
+  <div class="match-card" data-owners="Julia|Danielle">
+    <div class="match-time">00:00<br>CET</div>
+    <div class="match-body">
+      <div class="teams-row"><span class="flag">🇰🇷</span> Korea Republic <span class="vs">vs</span> <span class="flag">🇨🇿</span> Czechia</div>
+      <div class="match-meta">
+        <span class="group-pill">Group A</span>
+        <span class="owner-tag oc-julia">Julia</span>
+        <span class="owner-tag oc-jose">Jose</span>
+      </div>
+    </div>
+    <div class="score-box">– · –</div>
+  </div>
+</div>
+
+<!-- DRAW -->
+<div id="draw" class="page">
+  <div class="section-title">The Draw</div>
+  <div class="legend">
+    <div class="legend-item"><span class="ldot t1"></span>Pot 1 — Elite</div>
+    <div class="legend-item"><span class="ldot t2"></span>Pot 2 — Sterk</div>
+    <div class="legend-item"><span class="ldot t3"></span>Pot 3 — Kanshebbers</div>
+    <div class="legend-item"><span class="ldot t4"></span>Pot 4 — Underdogs</div>
+  </div>
+  <div class="draw-grid" id="drawGrid">
+
+    <div class="draw-card" data-owner="Danielle">
+      <div class="draw-owner">🎯 Danielle</div>
+      <div class="team-row"><span class="flag">🇪🇸</span><span>Spain</span><span class="tier-dot t1"></span></div>
+      <div class="team-row"><span class="flag">🇯🇵</span><span>Japan</span><span class="tier-dot t2"></span></div>
+      <div class="team-row"><span class="flag">🇹🇳</span><span>Tunisia</span><span class="tier-dot t3"></span></div>
+      <div class="team-row"><span class="flag">🇺🇿</span><span>Uzbekistan</span><span class="tier-dot t4"></span></div>
+    </div>
+
+    <div class="draw-card" data-owner="Jim">
+      <div class="draw-owner">🎯 Jim</div>
+      <div class="team-row"><span class="flag">🇺🇸</span><span>USA</span><span class="tier-dot t1"></span></div>
+      <div class="team-row"><span class="flag">🇳🇴</span><span>Norway</span><span class="tier-dot t2"></span></div>
+      <div class="team-row"><span class="flag">🇮🇷</span><span>Iran</span><span class="tier-dot t3"></span></div>
+      <div class="team-row"><span class="flag">🇨🇼</span><span>Curaçao</span><span class="tier-dot t4"></span></div>
+    </div>
+
+    <div class="draw-card" data-owner="Jose">
+      <div class="draw-owner">🎯 Jose</div>
+      <div class="team-row"><span class="flag">🇦🇷</span><span>Argentina</span><span class="tier-dot t1"></span></div>
+      <div class="team-row"><span class="flag">🇨🇭</span><span>Switzerland</span><span class="tier-dot t2"></span></div>
+      <div class="team-row"><span class="flag">🇨🇿</span><span>Czechia</span><span class="tier-dot t3"></span></div>
+      <div class="team-row"><span class="flag">🇯🇴</span><span>Jordan</span><span class="tier-dot t4"></span></div>
+    </div>
+
+    <div class="draw-card" data-owner="Julia">
+      <div class="draw-owner">🎯 Julia</div>
+      <div class="team-row"><span class="flag">🇳🇱</span><span>Netherlands</span><span class="tier-dot t1"></span></div>
+      <div class="team-row"><span class="flag">🇹🇷</span><span>Türkiye</span><span class="tier-dot t2"></span></div>
+      <div class="team-row"><span class="flag">🇵🇾</span><span>Paraguay</span><span class="tier-dot t3"></span></div>
+      <div class="team-row"><span class="flag">🇮🇶</span><span>Iraq</span><span class="tier-dot t4"></span></div>
+    </div>
+
+    <div class="draw-card" data-owner="Noud & Liz">
+      <div class="draw-owner">🎯 Noud & Liz</div>
+      <div class="team-row"><span class="flag">🇺🇾</span><span>Uruguay</span><span class="tier-dot t1"></span></div>
+      <div class="team-row"><span class="flag">🇦🇹</span><span>Austria</span><span class="tier-dot t2"></span></div>
+      <div class="team-row"><span class="flag">🇿🇦</span><span>South Africa</span><span class="tier-dot t3"></span></div>
+      <div class="team-row"><span class="flag">🇨🇩</span><span>DR Congo</span><span class="tier-dot t4"></span></div>
+    </div>
+
+    <div class="draw-card" data-owner="Piet">
+      <div class="draw-owner">🎯 Piet</div>
+      <div class="team-row"><span class="flag">🇩🇪</span><span>Germany</span><span class="tier-dot t1"></span></div>
+      <div class="team-row"><span class="flag">🇲🇦</span><span>Morocco</span><span class="tier-dot t2"></span></div>
+      <div class="team-row"><span class="flag">🇭🇷</span><span>Croatia</span><span class="tier-dot t3"></span></div>
+      <div class="team-row"><span class="flag">🇭🇹</span><span>Haiti</span><span class="tier-dot t4"></span></div>
+    </div>
+
+    <div class="draw-card highlight" data-owner="Ruairi">
+      <div class="draw-owner">🎯 Ruairi</div>
+      <div class="team-row"><span class="flag">🇨🇴</span><span>Colombia</span><span class="tier-dot t1"></span></div>
+      <div class="team-row"><span class="flag">🇪🇨</span><span>Ecuador</span><span class="tier-dot t2"></span></div>
+      <div class="team-row"><span class="flag">🇨🇮</span><span>Ivory Coast</span><span class="tier-dot t3"></span></div>
+      <div class="team-row"><span class="flag">🇶🇦</span><span>Qatar</span><span class="tier-dot t4"></span></div>
+    </div>
+
+    <div class="draw-card" data-owner="Saskia">
+      <div class="draw-owner">🎯 Saskia</div>
+      <div class="team-row"><span class="flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span>England</span><span class="tier-dot t1"></span></div>
+      <div class="team-row"><span class="flag">🇦🇺</span><span>Australia</span><span class="tier-dot t2"></span></div>
+      <div class="team-row"><span class="flag">🇩🇿</span><span>Algeria</span><span class="tier-dot t3"></span></div>
+      <div class="team-row"><span class="flag">🇳🇿</span><span>New Zealand</span><span class="tier-dot t4"></span></div>
+    </div>
+
+    <div class="draw-card" data-owner="Sharice">
+      <div class="draw-owner">🎯 Sharice</div>
+      <div class="team-row"><span class="flag">🇵🇹</span><span>Portugal</span><span class="tier-dot t1"></span></div>
+      <div class="team-row"><span class="flag">🇲🇽</span><span>Mexico</span><span class="tier-dot t2"></span></div>
+      <div class="team-row"><span class="flag">🇨🇮</span><span>Ivory Coast</span><span class="tier-dot t3"></span></div>
+      <div class="team-row"><span class="flag">🇸🇦</span><span>Saudi Arabia</span><span class="tier-dot t4"></span></div>
+    </div>
+
+    <div class="draw-card" data-owner="Sjoerd">
+      <div class="draw-owner">🎯 Sjoerd</div>
+      <div class="team-row"><span class="flag">🇧🇪</span><span>Belgium</span><span class="tier-dot t1"></span></div>
+      <div class="team-row"><span class="flag">🇸🇪</span><span>Sweden</span><span class="tier-dot t2"></span></div>
+      <div class="team-row"><span class="flag">🇨🇦</span><span>Canada</span><span class="tier-dot t3"></span></div>
+      <div class="team-row"><span class="flag">🇵🇦</span><span>Panama</span><span class="tier-dot t4"></span></div>
+    </div>
+
+    <div class="draw-card" data-owner="Wouter">
+      <div class="draw-owner">🎯 Wouter</div>
+      <div class="team-row"><span class="flag">🇫🇷</span><span>France</span><span class="tier-dot t1"></span></div>
+      <div class="team-row"><span class="flag">🇰🇷</span><span>South Korea</span><span class="tier-dot t2"></span></div>
+      <div class="team-row"><span class="flag">🇪🇬</span><span>Egypt</span><span class="tier-dot t3"></span></div>
+      <div class="team-row"><span class="flag">🇨🇻</span><span>Cape Verde</span><span class="tier-dot t4"></span></div>
+    </div>
+
+    <div class="draw-card" data-owner="Zoë">
+      <div class="draw-owner">🎯 Zoë</div>
+      <div class="team-row"><span class="flag">🇧🇷</span><span>Brazil</span><span class="tier-dot t1"></span></div>
+      <div class="team-row"><span class="flag">🇸🇳</span><span>Senegal</span><span class="tier-dot t2"></span></div>
+      <div class="team-row"><span class="flag">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span><span>Scotland</span><span class="tier-dot t3"></span></div>
+      <div class="team-row"><span class="flag">🇧🇦</span><span>Bosnia & Herz.</span><span class="tier-dot t4"></span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- GROUPS -->
+<div id="groups" class="page">
+  <div class="section-title">All 12 Groups</div>
+  <div class="groups-grid">
+
+    <div class="group-card">
+      <h4>Group A</h4>
+      <div class="group-team"><span class="flag">🇲🇽</span> Mexico <span class="gt-owner oc-sharice">Sharice</span></div>
+      <div class="group-team"><span class="flag">🇿🇦</span> South Africa <span class="gt-owner oc-noudliz">Noud & Liz</span></div>
+      <div class="group-team"><span class="flag">🇰🇷</span> Korea Republic <span class="gt-owner oc-wouter">Wouter</span></div>
+      <div class="group-team"><span class="flag">🇨🇿</span> Czechia <span class="gt-owner oc-jose">Jose</span></div>
+    </div>
+
+    <div class="group-card">
+      <h4>Group B</h4>
+      <div class="group-team"><span class="flag">🇨🇦</span> Canada <span class="gt-owner oc-sjoerd">Sjoerd</span></div>
+      <div class="group-team"><span class="flag">🇧🇦</span> Bosnia & Herz. <span class="gt-owner oc-zoe">Zoë</span></div>
+      <div class="group-team"><span class="flag">🇶🇦</span> Qatar <span class="gt-owner oc-ruairi">Ruairi</span></div>
+      <div class="group-team"><span class="flag">🇨🇭</span> Switzerland <span class="gt-owner oc-jose">Jose</span></div>
+    </div>
+
+    <div class="group-card">
+      <h4>Group C</h4>
+      <div class="group-team"><span class="flag">🇧🇷</span> Brazil <span class="gt-owner oc-zoe">Zoë</span></div>
+      <div class="group-team"><span class="flag">🇲🇦</span> Morocco <span class="gt-owner oc-piet">Piet</span></div>
+      <div class="group-team"><span class="flag">🇭🇹</span> Haiti <span class="gt-owner oc-piet">Piet</span></div>
+      <div class="group-team"><span class="flag">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span> Scotland <span class="gt-owner oc-zoe">Zoë</span></div>
+    </div>
+
+    <div class="group-card">
+      <h4>Group D</h4>
+      <div class="group-team"><span class="flag">🇺🇸</span> USA <span class="gt-owner oc-jim">Jim</span></div>
+      <div class="group-team"><span class="flag">🇵🇾</span> Paraguay <span class="gt-owner oc-julia">Julia</span></div>
+      <div class="group-team"><span class="flag">🇦🇺</span> Australia <span class="gt-owner oc-saskia">Saskia</span></div>
+      <div class="group-team"><span class="flag">🇹🇷</span> Türkiye <span class="gt-owner oc-julia">Julia</span></div>
+    </div>
+
+    <div class="group-card">
+      <h4>Group E</h4>
+      <div class="group-team"><span class="flag">🇩🇪</span> Germany <span class="gt-owner oc-piet">Piet</span></div>
+      <div class="group-team"><span class="flag">🇨🇼</span> Curaçao <span class="gt-owner oc-jim">Jim</span></div>
+      <div class="group-team"><span class="flag">🇨🇮</span> Ivory Coast <span class="gt-owner oc-ruairi">Ruairi</span></div>
+      <div class="group-team"><span class="flag">🇪🇨</span> Ecuador <span class="gt-owner oc-ruairi">Ruairi</span></div>
+    </div>
+
+    <div class="group-card">
+      <h4>Group F</h4>
+      <div class="group-team"><span class="flag">🇳🇱</span> Netherlands <span class="gt-owner oc-julia">Julia</span></div>
+      <div class="group-team"><span class="flag">🇯🇵</span> Japan <span class="gt-owner oc-danielle">Danielle</span></div>
+      <div class="group-team"><span class="flag">🇸🇪</span> Sweden <span class="gt-owner oc-sjoerd">Sjoerd</span></div>
+      <div class="group-team"><span class="flag">🇹🇳</span> Tunisia <span class="gt-owner oc-danielle">Danielle</span></div>
+    </div>
+
+    <div class="group-card">
+      <h4>Group G</h4>
+      <div class="group-team"><span class="flag">🇧🇪</span> Belgium <span class="gt-owner oc-sjoerd">Sjoerd</span></div>
+      <div class="group-team"><span class="flag">🇪🇬</span> Egypt <span class="gt-owner oc-wouter">Wouter</span></div>
+      <div class="group-team"><span class="flag">🇮🇷</span> Iran <span class="gt-owner oc-jim">Jim</span></div>
+      <div class="group-team"><span class="flag">🇳🇿</span> New Zealand <span class="gt-owner oc-saskia">Saskia</span></div>
+    </div>
+
+    <div class="group-card">
+      <h4>Group H</h4>
+      <div class="group-team"><span class="flag">🇪🇸</span> Spain <span class="gt-owner oc-danielle">Danielle</span></div>
+      <div class="group-team"><span class="flag">🇨🇻</span> Cape Verde <span class="gt-owner oc-wouter">Wouter</span></div>
+      <div class="group-team"><span class="flag">🇸🇦</span> Saudi Arabia <span class="gt-owner oc-sharice">Sharice</span></div>
+      <div class="group-team"><span class="flag">🇺🇾</span> Uruguay <span class="gt-owner oc-noudliz">Noud & Liz</span></div>
+    </div>
+
+    <div class="group-card">
+      <h4>Group I</h4>
+      <div class="group-team"><span class="flag">🇫🇷</span> France <span class="gt-owner oc-wouter">Wouter</span></div>
+      <div class="group-team"><span class="flag">🇸🇳</span> Senegal <span class="gt-owner oc-zoe">Zoë</span></div>
+      <div class="group-team"><span class="flag">🇮🇶</span> Iraq <span class="gt-owner oc-julia">Julia</span></div>
+      <div class="group-team"><span class="flag">🇳🇴</span> Norway <span class="gt-owner oc-jim">Jim</span></div>
+    </div>
+
+    <div class="group-card">
+      <h4>Group J</h4>
+      <div class="group-team"><span class="flag">🇦🇷</span> Argentina <span class="gt-owner oc-jose">Jose</span></div>
+      <div class="group-team"><span class="flag">🇩🇿</span> Algeria <span class="gt-owner oc-saskia">Saskia</span></div>
+      <div class="group-team"><span class="flag">🇦🇹</span> Austria <span class="gt-owner oc-noudliz">Noud & Liz</span></div>
+      <div class="group-team"><span class="flag">🇯🇴</span> Jordan <span class="gt-owner oc-jose">Jose</span></div>
+    </div>
+
+    <div class="group-card">
+      <h4>Group K</h4>
+      <div class="group-team"><span class="flag">🇵🇹</span> Portugal <span class="gt-owner oc-sharice">Sharice</span></div>
+      <div class="group-team"><span class="flag">🇨🇩</span> DR Congo <span class="gt-owner oc-noudliz">Noud & Liz</span></div>
+      <div class="group-team"><span class="flag">🇺🇿</span> Uzbekistan <span class="gt-owner oc-danielle">Danielle</span></div>
+      <div class="group-team"><span class="flag">🇨🇴</span> Colombia <span class="gt-owner oc-ruairi">Ruairi</span></div>
+    </div>
+
+    <div class="group-card">
+      <h4>Group L</h4>
+      <div class="group-team"><span class="flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span> England <span class="gt-owner oc-saskia">Saskia</span></div>
+      <div class="group-team"><span class="flag">🇭🇷</span> Croatia <span class="gt-owner oc-piet">Piet</span></div>
+      <div class="group-team"><span class="flag">🇬🇭</span> Ghana <span class="gt-owner oc-jim">Jim</span></div>
+      <div class="group-team"><span class="flag">🇵🇦</span> Panama <span class="gt-owner oc-sjoerd">Sjoerd</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- STANDINGS -->
+<div id="standings" class="page">
+  <div class="section-title">Who's Still In?</div>
+  <div class="standings-wrap">
+    <table class="standings-table">
+      <thead>
+        <tr><th>#</th><th>Owner</th><th>Teams</th><th style="text-align:center">Active</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="rank r1">1</td><td class="sname">Danielle</td><td class="sflags">🇪🇸 🇯🇵 🇹🇳 🇺🇿</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
+        <tr><td class="rank r1">1</td><td class="sname">Jim</td><td class="sflags">🇺🇸 🇳🇴 🇮🇷 🇨🇼</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
+        <tr><td class="rank r1">1</td><td class="sname">Jose</td><td class="sflags">🇦🇷 🇨🇭 🇨🇿 🇯🇴</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
+        <tr><td class="rank r1">1</td><td class="sname">Julia</td><td class="sflags">🇳🇱 🇹🇷 🇵🇾 🇮🇶</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
+        <tr><td class="rank r1">1</td><td class="sname">Noud & Liz</td><td class="sflags">🇺🇾 🇦🇹 🇿🇦 🇨🇩</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
+        <tr><td class="rank r1">1</td><td class="sname">Piet</td><td class="sflags">🇩🇪 🇲🇦 🇭🇷 🇭🇹</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
+        <tr><td class="rank r1">1</td><td class="sname">Ruairi</td><td class="sflags">🇨🇴 🇪🇨 🇨🇮 🇶🇦</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
+        <tr><td class="rank r1">1</td><td class="sname">Saskia</td><td class="sflags">🏴󠁧󠁢󠁥󠁮󠁧󠁿 🇦🇺 🇩🇿 🇳🇿</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
+        <tr><td class="rank r1">1</td><td class="sname">Sharice</td><td class="sflags">🇵🇹 🇲🇽 🇨🇮 🇸🇦</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
+        <tr><td class="rank r1">1</td><td class="sname">Sjoerd</td><td class="sflags">🇧🇪 🇸🇪 🇨🇦 🇵🇦</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
+        <tr><td class="rank r1">1</td><td class="sname">Wouter</td><td class="sflags">🇫🇷 🇰🇷 🇪🇬 🇨🇻</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
+        <tr><td class="rank r1">1</td><td class="sname">Zoë</td><td class="sflags">🇧🇷 🇸🇳 🏴󠁧󠁢󠁳󠁣󠁴󠁿 🇧🇦</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:0.72rem;color:var(--muted);margin-top:10px;padding:0 2px;">Tournament starts 11 June — all 48 teams still active.</p>
+</div>
+
+<!-- BRACKET -->
+<div id="bracket" class="page">
+  <div class="section-title">Knockout Bracket</div>
+  <div class="bracket-msg">
+    <div class="icon">⏳</div>
+    <h3>Group Stage in Progress</h3>
+    <p>The Round of 32 bracket populates here once the group stage is complete.<br><br>
+    Top 2 from each group + 8 best 3rd-place teams advance — 32 teams total.<br><br>
+    <strong style="color:var(--gold)">Final: Sunday 19 July 2026 · MetLife Stadium, New Jersey</strong></p>
+  </div>
+</div>
+
+</div>
+
+<footer>
+  <strong>Family World Cup 2026</strong> · 48 teams · 12 owners · 1 trophy 🏆<br>
+  <span style="margin-top:4px;display:inline-block;color:#555;">Built with ❤️ · Updates daily</span>
+</footer>
+
+<script>
+  let activeFilter = 'all';
+
+  function showTab(id, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    el.classList.add('active');
+  }
+
+  function setFilter(name, el) {
+    activeFilter = name;
+    document.querySelectorAll('.name-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    applyFilter();
+  }
+
+  function applyFilter() {
+    document.querySelectorAll('.match-card').forEach(card => {
+      const owners = (card.dataset.owners || '').split('|');
+      if (activeFilter === 'all') { card.classList.remove('hidden','highlight'); }
+      else if (owners.includes(activeFilter)) { card.classList.remove('hidden'); card.classList.add('highlight'); }
+      else { card.classList.add('hidden'); card.classList.remove('highlight'); }
+    });
+    document.querySelectorAll('.draw-card').forEach(card => {
+      if (activeFilter === 'all') { card.classList.remove('hidden','highlight'); }
+      else if (card.dataset.owner === activeFilter) { card.classList.remove('hidden'); card.classList.add('highlight'); }
+      else { card.classList.add('hidden'); card.classList.remove('highlight'); }
+    });
+  }
+</script>
+</body>
+</html>
