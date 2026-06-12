@@ -23,10 +23,7 @@
 
   header {
     background: linear-gradient(160deg, #003d29 0%, #006747 40%, #004d35 100%);
-    padding: 28px 20px 22px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
+    padding: 28px 20px 22px; text-align: center; position: relative; overflow: hidden;
   }
   header::after {
     content:''; position:absolute; bottom:0; left:0; right:0;
@@ -34,16 +31,14 @@
   }
   .trophy { font-size:2.8rem; line-height:1; margin-bottom:4px; filter:drop-shadow(0 0 20px rgba(245,197,24,0.5)); }
   header h1 {
-    font-family:'Bebas Neue',cursive;
-    font-size: clamp(2.2rem,9vw,4rem);
+    font-family:'Bebas Neue',cursive; font-size: clamp(2.2rem,9vw,4rem);
     letter-spacing:5px; color:var(--gold); line-height:1;
     text-shadow: 0 0 40px rgba(245,197,24,0.4);
   }
   header p { color:rgba(255,255,255,0.55); font-size:0.8rem; margin-top:5px; letter-spacing:3px; text-transform:uppercase; }
   .dates-badge {
-    display:inline-block; margin-top:10px;
-    background:rgba(0,0,0,0.3); border:1px solid rgba(245,197,24,0.3);
-    border-radius:20px; padding:4px 14px;
+    display:inline-block; margin-top:10px; background:rgba(0,0,0,0.3);
+    border:1px solid rgba(245,197,24,0.3); border-radius:20px; padding:4px 14px;
     font-size:0.75rem; color:rgba(255,255,255,0.7); letter-spacing:1px;
   }
 
@@ -87,7 +82,7 @@
   .match-card:hover { border-color:rgba(245,197,24,0.25); }
   .match-card.highlight { border-color:var(--gold); background:rgba(245,197,24,0.04); }
   .match-card.hidden { display:none; }
-  .match-time { font-size:0.72rem; color:var(--muted); min-width:42px; text-align:center; line-height:1.3; }
+  .match-time { font-size:0.72rem; color:var(--muted); min-width:50px; text-align:center; line-height:1.3; }
   .match-body { flex:1; min-width:0; }
   .teams-row { display:flex; align-items:center; gap:6px; font-weight:600; font-size:0.9rem; flex-wrap:wrap; }
   .flag { font-size:1.1rem; }
@@ -97,8 +92,8 @@
   .owner-tag { font-size:0.68rem; font-weight:700; padding:2px 8px; border-radius:10px; }
   .score-box { background:var(--dark); border:1px solid var(--border); border-radius:7px; padding:4px 10px; font-family:'Bebas Neue',cursive; font-size:1.1rem; letter-spacing:2px; min-width:58px; text-align:center; }
   .score-box.live { border-color:var(--red); color:var(--red); }
+  .score-box.finished { border-color:#3a3; color:#6ee7b7; }
 
-  /* owner colours — one per person */
   .oc-danielle  { background:rgba(139,92,246,0.15); color:#a78bfa; }
   .oc-jim       { background:rgba(245,158,11,0.15); color:#fbbf24; }
   .oc-jose      { background:rgba(16,185,129,0.15); color:#34d399; }
@@ -117,8 +112,16 @@
   .draw-card:hover { border-color:rgba(245,197,24,0.3); }
   .draw-card.highlight { border-color:var(--gold); background:rgba(245,197,24,0.04); }
   .draw-card.hidden { display:none; }
-  .draw-owner { font-weight:700; font-size:0.88rem; margin-bottom:10px; color:var(--gold); }
+  .draw-owner { font-weight:700; font-size:0.88rem; margin-bottom:10px; color:var(--gold); display:flex; justify-content:space-between; align-items:center; }
+  .owner-count { font-size:0.68rem; font-weight:700; padding:2px 8px; border-radius:10px; background:rgba(0,103,71,0.3); color:#4ade80; border:1px solid rgba(0,103,71,0.5); }
   .team-row { display:flex; align-items:center; gap:7px; padding:4px 0; font-size:0.82rem; }
+  .team-row.elim { opacity:0.35; }
+  .team-row.elim .tname { text-decoration:line-through; }
+  .qual-badge {
+    font-size:0.58rem; font-weight:700; text-transform:uppercase;
+    background:rgba(0,103,71,0.4); color:#4ade80; border:1px solid rgba(0,103,71,0.6);
+    padding:1px 5px; border-radius:4px; letter-spacing:0.5px;
+  }
   .tier-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; margin-left:auto; }
   .t1{background:#F5C518;} .t2{background:#C0C0C0;} .t3{background:#CD7F32;} .t4{background:#555e6b;}
 
@@ -133,17 +136,22 @@
   .sname { font-weight:600; }
   .sflags { font-size:0.88rem; letter-spacing:1px; }
   .active-badge { display:inline-block; padding:3px 9px; border-radius:12px; font-weight:700; font-size:0.78rem; background:rgba(0,103,71,0.4); color:#4ade80; border:1px solid rgba(0,103,71,0.6); }
+  .active-badge.zero { background:rgba(80,20,20,0.4); color:#f87171; border:1px solid rgba(80,20,20,0.5); }
+  .active-badge.one { background:rgba(50,50,30,0.4); color:#d4a017; border:1px solid rgba(50,50,30,0.5); }
 
   .legend { display:flex; gap:14px; flex-wrap:wrap; font-size:0.73rem; color:var(--muted); margin-bottom:14px; }
   .legend-item { display:flex; align-items:center; gap:5px; }
   .ldot { width:8px; height:8px; border-radius:50%; }
 
-  .groups-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:10px; }
+  .groups-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(230px,1fr)); gap:10px; }
   .group-card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:12px; }
-  .group-card h4 { font-family:'Bebas Neue',cursive; font-size:1rem; letter-spacing:2px; color:var(--gold); margin-bottom:8px; }
-  .group-team { display:flex; align-items:center; gap:8px; padding:5px 0; font-size:0.82rem; border-bottom:1px solid rgba(48,54,61,0.4); }
-  .group-team:last-child { border-bottom:none; }
-  .gt-owner { margin-left:auto; font-size:0.68rem; font-weight:700; padding:2px 7px; border-radius:8px; }
+  .group-card h4 { font-family:'Bebas Neue',cursive; font-size:1rem; letter-spacing:2px; color:var(--gold); margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
+  .gp-table { width:100%; font-size:0.78rem; border-collapse:collapse; }
+  .gp-table th { text-align:center; font-size:0.6rem; color:var(--muted); text-transform:uppercase; padding:2px 4px; font-weight:600; }
+  .gp-table th:first-child, .gp-table td:first-child { text-align:left; }
+  .gp-table td { padding:4px; text-align:center; border-top:1px solid rgba(48,54,61,0.4); }
+  .gp-table tr:nth-child(2) td, .gp-table tr:nth-child(3) td { color:#6ee7b7; }
+  .gt-owner { font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:7px; display:inline-block; margin-top:2px; }
 
   .bracket-msg { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:32px; text-align:center; }
   .bracket-msg .icon { font-size:2.5rem; margin-bottom:12px; }
@@ -155,8 +163,25 @@
   .live-dot { width:6px; height:6px; border-radius:50%; background:var(--red); animation:pulse 1s infinite; }
   @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
 
+  .loading { text-align:center; padding:30px; color:var(--muted); font-size:0.85rem; }
+  .spinner {
+    width:24px; height:24px; border:3px solid var(--border); border-top-color:var(--gold);
+    border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 10px;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
   footer { text-align:center; padding:20px; color:var(--muted); font-size:0.73rem; border-top:1px solid var(--border); margin-top:24px; }
   footer strong { color:var(--gold); }
+
+  .day-nav { display:flex; gap:8px; overflow-x:auto; padding-bottom:8px; margin-bottom:4px; scrollbar-width:none; }
+  .day-nav::-webkit-scrollbar { display:none; }
+  .day-btn {
+    flex:none; padding:6px 14px; border-radius:8px; border:1px solid var(--border);
+    background:var(--card); color:var(--muted); font-size:0.75rem; cursor:pointer;
+    font-family:'DM Sans',sans-serif; font-weight:600; white-space:nowrap; transition:all 0.15s;
+  }
+  .day-btn.active { background:var(--gold); color:#000; border-color:var(--gold); }
+  .day-btn:hover:not(.active) { color:var(--text); border-color:var(--gold); }
 </style>
 </head>
 <body>
@@ -171,361 +196,478 @@
 <div class="filter-wrap">
   <div class="filter-label">Filter by owner</div>
   <div class="names" id="nameButtons">
-    <button class="name-btn active" onclick="setFilter('all',this)">All</button>
-    <button class="name-btn" onclick="setFilter('Danielle',this)">Danielle</button>
-    <button class="name-btn" onclick="setFilter('Jim',this)">Jim</button>
-    <button class="name-btn" onclick="setFilter('Jose',this)">Jose</button>
-    <button class="name-btn" onclick="setFilter('Julia',this)">Julia</button>
-    <button class="name-btn" onclick="setFilter('Noud & Liz',this)">Noud & Liz</button>
-    <button class="name-btn" onclick="setFilter('Piet',this)">Piet</button>
-    <button class="name-btn" onclick="setFilter('Ruairi',this)">Ruairi</button>
-    <button class="name-btn" onclick="setFilter('Saskia',this)">Saskia</button>
-    <button class="name-btn" onclick="setFilter('Sharice',this)">Sharice</button>
-    <button class="name-btn" onclick="setFilter('Sjoerd',this)">Sjoerd</button>
-    <button class="name-btn" onclick="setFilter('Wouter',this)">Wouter</button>
-    <button class="name-btn" onclick="setFilter('Zoë',this)">Zoë</button>
+    <button class="name-btn active" data-owner="all">All</button>
   </div>
 </div>
 
 <div class="tabs">
-  <div class="tab active" onclick="showTab('today',this)">Today's Games</div>
-  <div class="tab" onclick="showTab('draw',this)">The Draw</div>
-  <div class="tab" onclick="showTab('groups',this)">Groups</div>
-  <div class="tab" onclick="showTab('standings',this)">Standings</div>
-  <div class="tab" onclick="showTab('bracket',this)">Bracket</div>
+  <div class="tab active" data-page="today">Today's Games</div>
+  <div class="tab" data-page="draw">The Draw</div>
+  <div class="tab" data-page="groups">Groups</div>
+  <div class="tab" data-page="standings">Standings</div>
+  <div class="tab" data-page="bracket">Bracket</div>
 </div>
 
 <div class="content">
 
-<!-- TODAY -->
-<div id="today" class="page active">
-  <div class="info-bar">
-    <span class="live-pill"><span class="live-dot"></span>Live</span>
-    <span>Thursday 11 June 2026 · Group Stage Day 1</span>
-    <span style="margin-left:auto">Last updated 21:00 CET</span>
+  <!-- TODAY -->
+  <div id="today" class="page active">
+    <div class="info-bar">
+      <span class="live-pill"><span class="live-dot"></span>Live</span>
+      <span id="lastUpdated">Loading data...</span>
+    </div>
+    <div class="day-nav" id="dayNav"></div>
+    <div id="matchesContainer">
+      <div class="loading"><div class="spinner"></div>Fetching latest match data…</div>
+    </div>
   </div>
 
-  <div class="match-day-label">Opening Match · Estadio Azteca, Mexico City</div>
-
-  <div class="match-card" data-owners="Sharice">
-    <div class="match-time">21:00<br>CET</div>
-    <div class="match-body">
-      <div class="teams-row"><span class="flag">🇲🇽</span> Mexico <span class="vs">vs</span> <span class="flag">🇿🇦</span> South Africa</div>
-      <div class="match-meta">
-        <span class="group-pill">Group A</span>
-        <span class="owner-tag oc-sharice">Sharice</span>
-        <span class="owner-tag oc-noudliz">Noud & Liz</span>
-      </div>
+  <!-- DRAW -->
+  <div id="draw" class="page">
+    <div class="section-title">The Draw</div>
+    <div class="legend">
+      <div class="legend-item"><span class="ldot t1"></span>Pot 1 — Elite</div>
+      <div class="legend-item"><span class="ldot t2"></span>Pot 2 — Sterk</div>
+      <div class="legend-item"><span class="ldot t3"></span>Pot 3 — Kanshebbers</div>
+      <div class="legend-item"><span class="ldot t4"></span>Pot 4 — Underdogs</div>
     </div>
-    <div class="score-box live">– · –</div>
+    <div class="legend" style="margin-top:-8px">
+      <div class="legend-item"><span class="qual-badge">Q</span> = Qualified for Round of 32</div>
+      <div class="legend-item">Strikethrough = Eliminated</div>
+    </div>
+    <div class="draw-grid" id="drawGrid"></div>
   </div>
 
-  <div class="match-day-label">Late · Estadio Akron, Guadalajara</div>
-
-  <div class="match-card" data-owners="Julia|Danielle">
-    <div class="match-time">00:00<br>CET</div>
-    <div class="match-body">
-      <div class="teams-row"><span class="flag">🇰🇷</span> Korea Republic <span class="vs">vs</span> <span class="flag">🇨🇿</span> Czechia</div>
-      <div class="match-meta">
-        <span class="group-pill">Group A</span>
-        <span class="owner-tag oc-julia">Julia</span>
-        <span class="owner-tag oc-jose">Jose</span>
-      </div>
-    </div>
-    <div class="score-box">– · –</div>
+  <!-- GROUPS -->
+  <div id="groups" class="page">
+    <div class="section-title">All 12 Groups</div>
+    <div class="groups-grid" id="groupsGrid"></div>
   </div>
-</div>
 
-<!-- DRAW -->
-<div id="draw" class="page">
-  <div class="section-title">The Draw</div>
-  <div class="legend">
-    <div class="legend-item"><span class="ldot t1"></span>Pot 1 — Elite</div>
-    <div class="legend-item"><span class="ldot t2"></span>Pot 2 — Sterk</div>
-    <div class="legend-item"><span class="ldot t3"></span>Pot 3 — Kanshebbers</div>
-    <div class="legend-item"><span class="ldot t4"></span>Pot 4 — Underdogs</div>
+  <!-- STANDINGS -->
+  <div id="standings" class="page">
+    <div class="section-title">Who's Still In?</div>
+    <div class="standings-wrap">
+      <table class="standings-table">
+        <thead>
+          <tr><th>#</th><th>Owner</th><th>Teams</th><th style="text-align:center">Active</th></tr>
+        </thead>
+        <tbody id="standingsBody"></tbody>
+      </table>
+    </div>
+    <p style="font-size:0.72rem;color:var(--muted);margin-top:10px;padding:0 2px;">
+      "Active" = teams not yet mathematically eliminated from the tournament.
+    </p>
   </div>
-  <div class="draw-grid" id="drawGrid">
 
-    <div class="draw-card" data-owner="Danielle">
-      <div class="draw-owner">🎯 Danielle</div>
-      <div class="team-row"><span class="flag">🇪🇸</span><span>Spain</span><span class="tier-dot t1"></span></div>
-      <div class="team-row"><span class="flag">🇯🇵</span><span>Japan</span><span class="tier-dot t2"></span></div>
-      <div class="team-row"><span class="flag">🇹🇳</span><span>Tunisia</span><span class="tier-dot t3"></span></div>
-      <div class="team-row"><span class="flag">🇺🇿</span><span>Uzbekistan</span><span class="tier-dot t4"></span></div>
+  <!-- BRACKET -->
+  <div id="bracket" class="page">
+    <div class="section-title">Knockout Bracket</div>
+    <div class="bracket-msg" id="bracketContent">
+      <div class="icon">⏳</div>
+      <h3>Group Stage in Progress</h3>
+      <p>The Round of 32 bracket populates here once the group stage is complete.<br><br>
+      Top 2 from each group + 8 best 3rd-place teams advance — 32 teams total.<br><br>
+      <strong style="color:var(--gold)">Final: Sunday 19 July 2026 · MetLife Stadium, New Jersey</strong></p>
     </div>
-
-    <div class="draw-card" data-owner="Jim">
-      <div class="draw-owner">🎯 Jim</div>
-      <div class="team-row"><span class="flag">🇺🇸</span><span>USA</span><span class="tier-dot t1"></span></div>
-      <div class="team-row"><span class="flag">🇳🇴</span><span>Norway</span><span class="tier-dot t2"></span></div>
-      <div class="team-row"><span class="flag">🇮🇷</span><span>Iran</span><span class="tier-dot t3"></span></div>
-      <div class="team-row"><span class="flag">🇨🇼</span><span>Curaçao</span><span class="tier-dot t4"></span></div>
-    </div>
-
-    <div class="draw-card" data-owner="Jose">
-      <div class="draw-owner">🎯 Jose</div>
-      <div class="team-row"><span class="flag">🇦🇷</span><span>Argentina</span><span class="tier-dot t1"></span></div>
-      <div class="team-row"><span class="flag">🇨🇭</span><span>Switzerland</span><span class="tier-dot t2"></span></div>
-      <div class="team-row"><span class="flag">🇨🇿</span><span>Czechia</span><span class="tier-dot t3"></span></div>
-      <div class="team-row"><span class="flag">🇯🇴</span><span>Jordan</span><span class="tier-dot t4"></span></div>
-    </div>
-
-    <div class="draw-card" data-owner="Julia">
-      <div class="draw-owner">🎯 Julia</div>
-      <div class="team-row"><span class="flag">🇳🇱</span><span>Netherlands</span><span class="tier-dot t1"></span></div>
-      <div class="team-row"><span class="flag">🇹🇷</span><span>Türkiye</span><span class="tier-dot t2"></span></div>
-      <div class="team-row"><span class="flag">🇵🇾</span><span>Paraguay</span><span class="tier-dot t3"></span></div>
-      <div class="team-row"><span class="flag">🇮🇶</span><span>Iraq</span><span class="tier-dot t4"></span></div>
-    </div>
-
-    <div class="draw-card" data-owner="Noud & Liz">
-      <div class="draw-owner">🎯 Noud & Liz</div>
-      <div class="team-row"><span class="flag">🇺🇾</span><span>Uruguay</span><span class="tier-dot t1"></span></div>
-      <div class="team-row"><span class="flag">🇦🇹</span><span>Austria</span><span class="tier-dot t2"></span></div>
-      <div class="team-row"><span class="flag">🇿🇦</span><span>South Africa</span><span class="tier-dot t3"></span></div>
-      <div class="team-row"><span class="flag">🇨🇩</span><span>DR Congo</span><span class="tier-dot t4"></span></div>
-    </div>
-
-    <div class="draw-card" data-owner="Piet">
-      <div class="draw-owner">🎯 Piet</div>
-      <div class="team-row"><span class="flag">🇩🇪</span><span>Germany</span><span class="tier-dot t1"></span></div>
-      <div class="team-row"><span class="flag">🇲🇦</span><span>Morocco</span><span class="tier-dot t2"></span></div>
-      <div class="team-row"><span class="flag">🇭🇷</span><span>Croatia</span><span class="tier-dot t3"></span></div>
-      <div class="team-row"><span class="flag">🇭🇹</span><span>Haiti</span><span class="tier-dot t4"></span></div>
-    </div>
-
-    <div class="draw-card highlight" data-owner="Ruairi">
-      <div class="draw-owner">🎯 Ruairi</div>
-      <div class="team-row"><span class="flag">🇨🇴</span><span>Colombia</span><span class="tier-dot t1"></span></div>
-      <div class="team-row"><span class="flag">🇪🇨</span><span>Ecuador</span><span class="tier-dot t2"></span></div>
-      <div class="team-row"><span class="flag">🇨🇮</span><span>Ivory Coast</span><span class="tier-dot t3"></span></div>
-      <div class="team-row"><span class="flag">🇶🇦</span><span>Qatar</span><span class="tier-dot t4"></span></div>
-    </div>
-
-    <div class="draw-card" data-owner="Saskia">
-      <div class="draw-owner">🎯 Saskia</div>
-      <div class="team-row"><span class="flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span>England</span><span class="tier-dot t1"></span></div>
-      <div class="team-row"><span class="flag">🇦🇺</span><span>Australia</span><span class="tier-dot t2"></span></div>
-      <div class="team-row"><span class="flag">🇩🇿</span><span>Algeria</span><span class="tier-dot t3"></span></div>
-      <div class="team-row"><span class="flag">🇳🇿</span><span>New Zealand</span><span class="tier-dot t4"></span></div>
-    </div>
-
-    <div class="draw-card" data-owner="Sharice">
-      <div class="draw-owner">🎯 Sharice</div>
-      <div class="team-row"><span class="flag">🇵🇹</span><span>Portugal</span><span class="tier-dot t1"></span></div>
-      <div class="team-row"><span class="flag">🇲🇽</span><span>Mexico</span><span class="tier-dot t2"></span></div>
-      <div class="team-row"><span class="flag">🇨🇮</span><span>Ivory Coast</span><span class="tier-dot t3"></span></div>
-      <div class="team-row"><span class="flag">🇸🇦</span><span>Saudi Arabia</span><span class="tier-dot t4"></span></div>
-    </div>
-
-    <div class="draw-card" data-owner="Sjoerd">
-      <div class="draw-owner">🎯 Sjoerd</div>
-      <div class="team-row"><span class="flag">🇧🇪</span><span>Belgium</span><span class="tier-dot t1"></span></div>
-      <div class="team-row"><span class="flag">🇸🇪</span><span>Sweden</span><span class="tier-dot t2"></span></div>
-      <div class="team-row"><span class="flag">🇨🇦</span><span>Canada</span><span class="tier-dot t3"></span></div>
-      <div class="team-row"><span class="flag">🇵🇦</span><span>Panama</span><span class="tier-dot t4"></span></div>
-    </div>
-
-    <div class="draw-card" data-owner="Wouter">
-      <div class="draw-owner">🎯 Wouter</div>
-      <div class="team-row"><span class="flag">🇫🇷</span><span>France</span><span class="tier-dot t1"></span></div>
-      <div class="team-row"><span class="flag">🇰🇷</span><span>South Korea</span><span class="tier-dot t2"></span></div>
-      <div class="team-row"><span class="flag">🇪🇬</span><span>Egypt</span><span class="tier-dot t3"></span></div>
-      <div class="team-row"><span class="flag">🇨🇻</span><span>Cape Verde</span><span class="tier-dot t4"></span></div>
-    </div>
-
-    <div class="draw-card" data-owner="Zoë">
-      <div class="draw-owner">🎯 Zoë</div>
-      <div class="team-row"><span class="flag">🇧🇷</span><span>Brazil</span><span class="tier-dot t1"></span></div>
-      <div class="team-row"><span class="flag">🇸🇳</span><span>Senegal</span><span class="tier-dot t2"></span></div>
-      <div class="team-row"><span class="flag">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span><span>Scotland</span><span class="tier-dot t3"></span></div>
-      <div class="team-row"><span class="flag">🇧🇦</span><span>Bosnia & Herz.</span><span class="tier-dot t4"></span></div>
-    </div>
-
   </div>
-</div>
-
-<!-- GROUPS -->
-<div id="groups" class="page">
-  <div class="section-title">All 12 Groups</div>
-  <div class="groups-grid">
-
-    <div class="group-card">
-      <h4>Group A</h4>
-      <div class="group-team"><span class="flag">🇲🇽</span> Mexico <span class="gt-owner oc-sharice">Sharice</span></div>
-      <div class="group-team"><span class="flag">🇿🇦</span> South Africa <span class="gt-owner oc-noudliz">Noud & Liz</span></div>
-      <div class="group-team"><span class="flag">🇰🇷</span> Korea Republic <span class="gt-owner oc-wouter">Wouter</span></div>
-      <div class="group-team"><span class="flag">🇨🇿</span> Czechia <span class="gt-owner oc-jose">Jose</span></div>
-    </div>
-
-    <div class="group-card">
-      <h4>Group B</h4>
-      <div class="group-team"><span class="flag">🇨🇦</span> Canada <span class="gt-owner oc-sjoerd">Sjoerd</span></div>
-      <div class="group-team"><span class="flag">🇧🇦</span> Bosnia & Herz. <span class="gt-owner oc-zoe">Zoë</span></div>
-      <div class="group-team"><span class="flag">🇶🇦</span> Qatar <span class="gt-owner oc-ruairi">Ruairi</span></div>
-      <div class="group-team"><span class="flag">🇨🇭</span> Switzerland <span class="gt-owner oc-jose">Jose</span></div>
-    </div>
-
-    <div class="group-card">
-      <h4>Group C</h4>
-      <div class="group-team"><span class="flag">🇧🇷</span> Brazil <span class="gt-owner oc-zoe">Zoë</span></div>
-      <div class="group-team"><span class="flag">🇲🇦</span> Morocco <span class="gt-owner oc-piet">Piet</span></div>
-      <div class="group-team"><span class="flag">🇭🇹</span> Haiti <span class="gt-owner oc-piet">Piet</span></div>
-      <div class="group-team"><span class="flag">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span> Scotland <span class="gt-owner oc-zoe">Zoë</span></div>
-    </div>
-
-    <div class="group-card">
-      <h4>Group D</h4>
-      <div class="group-team"><span class="flag">🇺🇸</span> USA <span class="gt-owner oc-jim">Jim</span></div>
-      <div class="group-team"><span class="flag">🇵🇾</span> Paraguay <span class="gt-owner oc-julia">Julia</span></div>
-      <div class="group-team"><span class="flag">🇦🇺</span> Australia <span class="gt-owner oc-saskia">Saskia</span></div>
-      <div class="group-team"><span class="flag">🇹🇷</span> Türkiye <span class="gt-owner oc-julia">Julia</span></div>
-    </div>
-
-    <div class="group-card">
-      <h4>Group E</h4>
-      <div class="group-team"><span class="flag">🇩🇪</span> Germany <span class="gt-owner oc-piet">Piet</span></div>
-      <div class="group-team"><span class="flag">🇨🇼</span> Curaçao <span class="gt-owner oc-jim">Jim</span></div>
-      <div class="group-team"><span class="flag">🇨🇮</span> Ivory Coast <span class="gt-owner oc-ruairi">Ruairi</span></div>
-      <div class="group-team"><span class="flag">🇪🇨</span> Ecuador <span class="gt-owner oc-ruairi">Ruairi</span></div>
-    </div>
-
-    <div class="group-card">
-      <h4>Group F</h4>
-      <div class="group-team"><span class="flag">🇳🇱</span> Netherlands <span class="gt-owner oc-julia">Julia</span></div>
-      <div class="group-team"><span class="flag">🇯🇵</span> Japan <span class="gt-owner oc-danielle">Danielle</span></div>
-      <div class="group-team"><span class="flag">🇸🇪</span> Sweden <span class="gt-owner oc-sjoerd">Sjoerd</span></div>
-      <div class="group-team"><span class="flag">🇹🇳</span> Tunisia <span class="gt-owner oc-danielle">Danielle</span></div>
-    </div>
-
-    <div class="group-card">
-      <h4>Group G</h4>
-      <div class="group-team"><span class="flag">🇧🇪</span> Belgium <span class="gt-owner oc-sjoerd">Sjoerd</span></div>
-      <div class="group-team"><span class="flag">🇪🇬</span> Egypt <span class="gt-owner oc-wouter">Wouter</span></div>
-      <div class="group-team"><span class="flag">🇮🇷</span> Iran <span class="gt-owner oc-jim">Jim</span></div>
-      <div class="group-team"><span class="flag">🇳🇿</span> New Zealand <span class="gt-owner oc-saskia">Saskia</span></div>
-    </div>
-
-    <div class="group-card">
-      <h4>Group H</h4>
-      <div class="group-team"><span class="flag">🇪🇸</span> Spain <span class="gt-owner oc-danielle">Danielle</span></div>
-      <div class="group-team"><span class="flag">🇨🇻</span> Cape Verde <span class="gt-owner oc-wouter">Wouter</span></div>
-      <div class="group-team"><span class="flag">🇸🇦</span> Saudi Arabia <span class="gt-owner oc-sharice">Sharice</span></div>
-      <div class="group-team"><span class="flag">🇺🇾</span> Uruguay <span class="gt-owner oc-noudliz">Noud & Liz</span></div>
-    </div>
-
-    <div class="group-card">
-      <h4>Group I</h4>
-      <div class="group-team"><span class="flag">🇫🇷</span> France <span class="gt-owner oc-wouter">Wouter</span></div>
-      <div class="group-team"><span class="flag">🇸🇳</span> Senegal <span class="gt-owner oc-zoe">Zoë</span></div>
-      <div class="group-team"><span class="flag">🇮🇶</span> Iraq <span class="gt-owner oc-julia">Julia</span></div>
-      <div class="group-team"><span class="flag">🇳🇴</span> Norway <span class="gt-owner oc-jim">Jim</span></div>
-    </div>
-
-    <div class="group-card">
-      <h4>Group J</h4>
-      <div class="group-team"><span class="flag">🇦🇷</span> Argentina <span class="gt-owner oc-jose">Jose</span></div>
-      <div class="group-team"><span class="flag">🇩🇿</span> Algeria <span class="gt-owner oc-saskia">Saskia</span></div>
-      <div class="group-team"><span class="flag">🇦🇹</span> Austria <span class="gt-owner oc-noudliz">Noud & Liz</span></div>
-      <div class="group-team"><span class="flag">🇯🇴</span> Jordan <span class="gt-owner oc-jose">Jose</span></div>
-    </div>
-
-    <div class="group-card">
-      <h4>Group K</h4>
-      <div class="group-team"><span class="flag">🇵🇹</span> Portugal <span class="gt-owner oc-sharice">Sharice</span></div>
-      <div class="group-team"><span class="flag">🇨🇩</span> DR Congo <span class="gt-owner oc-noudliz">Noud & Liz</span></div>
-      <div class="group-team"><span class="flag">🇺🇿</span> Uzbekistan <span class="gt-owner oc-danielle">Danielle</span></div>
-      <div class="group-team"><span class="flag">🇨🇴</span> Colombia <span class="gt-owner oc-ruairi">Ruairi</span></div>
-    </div>
-
-    <div class="group-card">
-      <h4>Group L</h4>
-      <div class="group-team"><span class="flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span> England <span class="gt-owner oc-saskia">Saskia</span></div>
-      <div class="group-team"><span class="flag">🇭🇷</span> Croatia <span class="gt-owner oc-piet">Piet</span></div>
-      <div class="group-team"><span class="flag">🇬🇭</span> Ghana <span class="gt-owner oc-jim">Jim</span></div>
-      <div class="group-team"><span class="flag">🇵🇦</span> Panama <span class="gt-owner oc-sjoerd">Sjoerd</span></div>
-    </div>
-
-  </div>
-</div>
-
-<!-- STANDINGS -->
-<div id="standings" class="page">
-  <div class="section-title">Who's Still In?</div>
-  <div class="standings-wrap">
-    <table class="standings-table">
-      <thead>
-        <tr><th>#</th><th>Owner</th><th>Teams</th><th style="text-align:center">Active</th></tr>
-      </thead>
-      <tbody>
-        <tr><td class="rank r1">1</td><td class="sname">Danielle</td><td class="sflags">🇪🇸 🇯🇵 🇹🇳 🇺🇿</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
-        <tr><td class="rank r1">1</td><td class="sname">Jim</td><td class="sflags">🇺🇸 🇳🇴 🇮🇷 🇨🇼</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
-        <tr><td class="rank r1">1</td><td class="sname">Jose</td><td class="sflags">🇦🇷 🇨🇭 🇨🇿 🇯🇴</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
-        <tr><td class="rank r1">1</td><td class="sname">Julia</td><td class="sflags">🇳🇱 🇹🇷 🇵🇾 🇮🇶</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
-        <tr><td class="rank r1">1</td><td class="sname">Noud & Liz</td><td class="sflags">🇺🇾 🇦🇹 🇿🇦 🇨🇩</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
-        <tr><td class="rank r1">1</td><td class="sname">Piet</td><td class="sflags">🇩🇪 🇲🇦 🇭🇷 🇭🇹</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
-        <tr><td class="rank r1">1</td><td class="sname">Ruairi</td><td class="sflags">🇨🇴 🇪🇨 🇨🇮 🇶🇦</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
-        <tr><td class="rank r1">1</td><td class="sname">Saskia</td><td class="sflags">🏴󠁧󠁢󠁥󠁮󠁧󠁿 🇦🇺 🇩🇿 🇳🇿</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
-        <tr><td class="rank r1">1</td><td class="sname">Sharice</td><td class="sflags">🇵🇹 🇲🇽 🇨🇮 🇸🇦</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
-        <tr><td class="rank r1">1</td><td class="sname">Sjoerd</td><td class="sflags">🇧🇪 🇸🇪 🇨🇦 🇵🇦</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
-        <tr><td class="rank r1">1</td><td class="sname">Wouter</td><td class="sflags">🇫🇷 🇰🇷 🇪🇬 🇨🇻</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
-        <tr><td class="rank r1">1</td><td class="sname">Zoë</td><td class="sflags">🇧🇷 🇸🇳 🏴󠁧󠁢󠁳󠁣󠁴󠁿 🇧🇦</td><td style="text-align:center"><span class="active-badge">4</span></td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p style="font-size:0.72rem;color:var(--muted);margin-top:10px;padding:0 2px;">Tournament starts 11 June — all 48 teams still active.</p>
-</div>
-
-<!-- BRACKET -->
-<div id="bracket" class="page">
-  <div class="section-title">Knockout Bracket</div>
-  <div class="bracket-msg">
-    <div class="icon">⏳</div>
-    <h3>Group Stage in Progress</h3>
-    <p>The Round of 32 bracket populates here once the group stage is complete.<br><br>
-    Top 2 from each group + 8 best 3rd-place teams advance — 32 teams total.<br><br>
-    <strong style="color:var(--gold)">Final: Sunday 19 July 2026 · MetLife Stadium, New Jersey</strong></p>
-  </div>
-</div>
 
 </div>
 
 <footer>
   <strong>Family World Cup 2026</strong> · 48 teams · 12 owners · 1 trophy 🏆<br>
-  <span style="margin-top:4px;display:inline-block;color:#555;">Built with ❤️ · Updates daily</span>
+  <span style="margin-top:4px;display:inline-block;color:#555;">Live data refreshes every 5 minutes</span>
 </footer>
 
+<!-- DRAW DATA -->
+<script src="draw-data.js"></script>
+
+<!-- MAIN APP LOGIC -->
 <script>
-  let activeFilter = 'all';
+// =========================================================
+// CONFIG — paste your published CSV URL here
+// =========================================================
+const MATCHES_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRMSwx5xskz1svT0fFLy5sFzNq6N5hqIx_ZLxmFgWYESisXs5H0dBipecSAS-TZFMWJ013VwISIs_NW/pub?gid=0&single=true&output=csv";
+const REFRESH_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 
-  function showTab(id, el) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    el.classList.add('active');
+let activeFilter = 'all';
+let allMatches = [];
+let activeDay = null;
+
+// ---------------------------------------------------------
+// CSV PARSER (simple, handles quoted fields)
+// ---------------------------------------------------------
+function parseCSV(text) {
+  const rows = [];
+  let row = [];
+  let cur = '';
+  let inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (text[i+1] === '"') { cur += '"'; i++; }
+        else inQuotes = false;
+      } else cur += c;
+    } else {
+      if (c === '"') inQuotes = true;
+      else if (c === ',') { row.push(cur); cur = ''; }
+      else if (c === '\n' || c === '\r') {
+        if (c === '\r' && text[i+1] === '\n') i++;
+        row.push(cur); cur = '';
+        if (row.length > 1 || row[0] !== '') rows.push(row);
+        row = [];
+      } else cur += c;
+    }
+  }
+  if (cur !== '' || row.length) { row.push(cur); rows.push(row); }
+  return rows;
+}
+
+// ---------------------------------------------------------
+// FETCH MATCH DATA
+// ---------------------------------------------------------
+async function fetchMatches() {
+  try {
+    const res = await fetch(MATCHES_CSV_URL + '&t=' + Date.now());
+    const text = await res.text();
+    const rows = parseCSV(text);
+    const headers = rows[0].map(h => h.trim());
+    const idx = {
+      date: headers.indexOf('Date'),
+      group: headers.indexOf('Group'),
+      home: headers.indexOf('Home Team'),
+      away: headers.indexOf('Away Team'),
+      hs: headers.indexOf('Home Score'),
+      as: headers.indexOf('Away Score'),
+      status: headers.indexOf('Status'),
+      id: headers.indexOf('Match ID')
+    };
+    allMatches = rows.slice(1).filter(r => r.length > 1 && r[idx.home]).map(r => ({
+      date: r[idx.date],
+      group: r[idx.group],
+      home: r[idx.home],
+      away: r[idx.away],
+      homeScore: r[idx.hs] === '' ? null : parseInt(r[idx.hs]),
+      awayScore: r[idx.as] === '' ? null : parseInt(r[idx.as]),
+      status: r[idx.status],
+      id: r[idx.id]
+    }));
+    document.getElementById('lastUpdated').textContent =
+      'Last refreshed ' + new Date().toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'}) + ' · ' + allMatches.length + ' matches loaded';
+    renderAll();
+  } catch (err) {
+    document.getElementById('lastUpdated').textContent = 'Could not load live data — showing cached view';
+    document.getElementById('matchesContainer').innerHTML =
+      '<div class="loading">⚠️ Could not reach the data sheet.<br>Check the CSV publish link is still active.</div>';
+    console.error(err);
+  }
+}
+
+// ---------------------------------------------------------
+// TEAM STATUS CALCULATION
+// ---------------------------------------------------------
+function getGroupMatches(group) {
+  return allMatches.filter(m => m.group && m.group.toUpperCase().includes('GROUP ' + group.toUpperCase()) ||
+                                  m.group === group);
+}
+
+function computeGroupTable(group) {
+  const teams = Object.entries(TEAM_DATA).filter(([name,d]) => d.group === group).map(([name]) => name);
+  const table = {};
+  teams.forEach(t => table[t] = { team:t, played:0, won:0, drawn:0, lost:0, gf:0, ga:0, gd:0, pts:0 });
+
+  const matches = allMatches.filter(m => {
+    return teams.includes(m.home) && teams.includes(m.away);
+  });
+
+  matches.forEach(m => {
+    if (m.homeScore === null || m.awayScore === null) return;
+    const h = table[m.home], a = table[m.away];
+    if (!h || !a) return;
+    h.played++; a.played++;
+    h.gf += m.homeScore; h.ga += m.awayScore;
+    a.gf += m.awayScore; a.ga += m.homeScore;
+    if (m.homeScore > m.awayScore) { h.won++; h.pts+=3; a.lost++; }
+    else if (m.homeScore < m.awayScore) { a.won++; a.pts+=3; h.lost++; }
+    else { h.drawn++; a.drawn++; h.pts++; a.pts++; }
+  });
+
+  Object.values(table).forEach(t => t.gd = t.gf - t.ga);
+
+  return Object.values(table).sort((a,b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+}
+
+// A team is eliminated if mathematically impossible to reach top 2
+// (simplified: if played all 3 group games and not top 2 by points, OR
+//  cannot catch up even with max remaining points)
+function getTeamStatus(teamName) {
+  const data = TEAM_DATA[teamName];
+  if (!data) return 'unknown';
+  const tbl = computeGroupTable(data.group);
+  const teamRow = tbl.find(r => r.team === teamName);
+  if (!teamRow) return 'active';
+
+  const remainingGames = 3 - teamRow.played;
+
+  // Qualified: already has enough points that no one outside top2 can catch up
+  // Simplified check: if played 3/3 and in top 2 -> qualified
+  if (teamRow.played === 3) {
+    const idx = tbl.findIndex(r => r.team === teamName);
+    return idx < 2 ? 'qualified' : 'eliminated_group';
+    // (3rd place teams may still advance via best-3rd-place rule —
+    //  we don't compute that here, shown as eliminated_group but
+    //  could still be in bracket via wildcard)
   }
 
-  function setFilter(name, el) {
-    activeFilter = name;
-    document.querySelectorAll('.name-btn').forEach(b => b.classList.remove('active'));
-    el.classList.add('active');
-    applyFilter();
+  // Early qualification: max possible points for teams below vs current points
+  if (remainingGames > 0) {
+    const maxAdditional = remainingGames * 3;
+    const teamsAbove = tbl.filter(r => r.pts > teamRow.pts + 0).length;
+    // crude early elimination: if mathematically cannot reach top 2 even with max points
+    const maxPossible = teamRow.pts + maxAdditional;
+    const teamsThatCanBeatMax = tbl.filter(r => r.team !== teamName && r.pts > maxPossible).length;
+    if (teamsThatCanBeatMax >= 2) return 'eliminated_group';
+
+    // crude early qualification: pts already higher than what 3rd+4th place can reach even with max
+    const others = tbl.filter(r => r.team !== teamName);
+    const othersCanReach = others.filter(r => {
+      const otherRemaining = 3 - r.played;
+      return (r.pts + otherRemaining*3) >= teamRow.pts;
+    }).length;
+    if (othersCanReach <= 1 && teamRow.played >= 1) return 'qualified';
   }
 
-  function applyFilter() {
-    document.querySelectorAll('.match-card').forEach(card => {
-      const owners = (card.dataset.owners || '').split('|');
-      if (activeFilter === 'all') { card.classList.remove('hidden','highlight'); }
-      else if (owners.includes(activeFilter)) { card.classList.remove('hidden'); card.classList.add('highlight'); }
-      else { card.classList.add('hidden'); card.classList.remove('highlight'); }
-    });
-    document.querySelectorAll('.draw-card').forEach(card => {
-      if (activeFilter === 'all') { card.classList.remove('hidden','highlight'); }
-      else if (card.dataset.owner === activeFilter) { card.classList.remove('hidden'); card.classList.add('highlight'); }
-      else { card.classList.add('hidden'); card.classList.remove('highlight'); }
-    });
+  return 'active';
+}
+
+// ---------------------------------------------------------
+// RENDER: TODAY'S GAMES (grouped by day)
+// ---------------------------------------------------------
+function renderMatches() {
+  const container = document.getElementById('matchesContainer');
+  const dayNav = document.getElementById('dayNav');
+  if (!allMatches.length) {
+    container.innerHTML = '<div class="loading">No match data yet.</div>';
+    return;
   }
+
+  // group by date (YYYY-MM-DD)
+  const byDate = {};
+  allMatches.forEach(m => {
+    const d = (m.date || '').slice(0,10);
+    if (!byDate[d]) byDate[d] = [];
+    byDate[d].push(m);
+  });
+  const dates = Object.keys(byDate).filter(d=>d).sort();
+
+  // default to today if available, else first date with matches
+  if (!activeDay || !byDate[activeDay]) {
+    const todayStr = new Date().toISOString().slice(0,10);
+    activeDay = byDate[todayStr] ? todayStr : dates[0];
+  }
+
+  // day nav buttons
+  dayNav.innerHTML = dates.map(d => {
+    const dt = new Date(d);
+    const label = dt.toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'});
+    return `<button class="day-btn ${d===activeDay?'active':''}" data-day="${d}">${label}</button>`;
+  }).join('');
+
+  dayNav.querySelectorAll('.day-btn').forEach(btn => {
+    btn.onclick = () => { activeDay = btn.dataset.day; renderMatches(); };
+  });
+
+  const matches = byDate[activeDay] || [];
+  if (!matches.length) {
+    container.innerHTML = '<div class="loading">No matches scheduled this day.</div>';
+    return;
+  }
+
+  container.innerHTML = matches.map(m => {
+    const homeData = TEAM_DATA[m.home] || {flag:'🏳️', owner:null};
+    const awayData = TEAM_DATA[m.away] || {flag:'🏳️', owner:null};
+    const owners = [homeData.owner, awayData.owner].filter(Boolean);
+
+    let scoreClass = '';
+    let scoreText = '– · –';
+    if (m.status === 'IN_PLAY' || m.status === 'PAUSED') scoreClass = 'live';
+    if (m.status === 'FINISHED') scoreClass = 'finished';
+    if (m.homeScore !== null && m.awayScore !== null) scoreText = `${m.homeScore} · ${m.awayScore}`;
+
+    const timeStr = m.date ? new Date(m.date).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) : '--:--';
+
+    const ownerTags = owners.map(o => `<span class="owner-tag ${OWNER_CLASS[o]||''}">${o}</span>`).join('');
+
+    return `<div class="match-card" data-owners="${owners.join('|')}">
+      <div class="match-time">${timeStr}</div>
+      <div class="match-body">
+        <div class="teams-row">
+          <span class="flag">${homeData.flag}</span> ${m.home}
+          <span class="vs">vs</span>
+          <span class="flag">${awayData.flag}</span> ${m.away}
+        </div>
+        <div class="match-meta">
+          <span class="group-pill">${m.group || ''}</span>
+          ${ownerTags}
+        </div>
+      </div>
+      <div class="score-box ${scoreClass}">${scoreText}</div>
+    </div>`;
+  }).join('');
+
+  applyFilter();
+}
+
+// ---------------------------------------------------------
+// RENDER: DRAW TAB
+// ---------------------------------------------------------
+function renderDraw() {
+  const grid = document.getElementById('drawGrid');
+  const byOwner = {};
+  ALL_OWNERS.forEach(o => byOwner[o] = []);
+  Object.entries(TEAM_DATA).forEach(([name, d]) => byOwner[d.owner].push({name, ...d}));
+
+  grid.innerHTML = ALL_OWNERS.map(owner => {
+    const teams = byOwner[owner].sort((a,b) => a.tier - b.tier);
+    const activeCount = teams.filter(t => getTeamStatus(t.name) !== 'eliminated_group').length;
+    const rows = teams.map(t => {
+      const status = getTeamStatus(t.name);
+      const elimClass = status === 'eliminated_group' ? 'elim' : '';
+      const qualBadge = status === 'qualified' ? '<span class="qual-badge">Q</span>' : '';
+      return `<div class="team-row ${elimClass}">
+        <span class="flag">${t.flag}</span>
+        <span class="tname">${t.name}</span>
+        ${qualBadge}
+        <span class="tier-dot t${t.tier}"></span>
+      </div>`;
+    }).join('');
+    return `<div class="draw-card" data-owner="${owner}">
+      <div class="draw-owner">🎯 ${owner} <span class="owner-count">${activeCount} active</span></div>
+      ${rows}
+    </div>`;
+  }).join('');
+
+  applyFilter();
+}
+
+// ---------------------------------------------------------
+// RENDER: GROUPS TAB
+// ---------------------------------------------------------
+function renderGroups() {
+  const grid = document.getElementById('groupsGrid');
+  grid.innerHTML = ALL_GROUPS.map(group => {
+    const table = computeGroupTable(group);
+    const rows = table.map((r, i) => {
+      const data = TEAM_DATA[r.team];
+      const ownerClass = OWNER_CLASS[data.owner] || '';
+      return `<tr>
+        <td>${data.flag} ${r.team}</td>
+        <td>${r.played}</td>
+        <td>${r.gd > 0 ? '+'+r.gd : r.gd}</td>
+        <td>${r.pts}</td>
+      </tr>`;
+    }).join('');
+    return `<div class="group-card">
+      <h4>Group ${group}</h4>
+      <table class="gp-table">
+        <tr><th>Team</th><th>P</th><th>GD</th><th>Pts</th></tr>
+        ${rows}
+      </table>
+    </div>`;
+  }).join('');
+}
+
+// ---------------------------------------------------------
+// RENDER: STANDINGS TAB
+// ---------------------------------------------------------
+function renderStandings() {
+  const tbody = document.getElementById('standingsBody');
+  const ownerStats = ALL_OWNERS.map(owner => {
+    const teams = Object.entries(TEAM_DATA).filter(([n,d]) => d.owner === owner).map(([n,d]) => ({name:n, flag:d.flag}));
+    const active = teams.filter(t => getTeamStatus(t.name) !== 'eliminated_group').length;
+    return { owner, teams, active };
+  });
+
+  ownerStats.sort((a,b) => b.active - a.active);
+
+  let rank = 1;
+  tbody.innerHTML = ownerStats.map((o, i) => {
+    if (i > 0 && o.active !== ownerStats[i-1].active) rank = i+1;
+    const rankClass = rank===1?'r1':rank===2?'r2':rank===3?'r3':'';
+    const badgeClass = o.active===0?'zero':o.active===1?'one':'';
+    const flags = o.teams.map(t => t.flag).join(' ');
+    return `<tr>
+      <td class="rank ${rankClass}">${rank}</td>
+      <td class="sname">${o.owner}</td>
+      <td class="sflags">${flags}</td>
+      <td style="text-align:center"><span class="active-badge ${badgeClass}">${o.active}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ---------------------------------------------------------
+// FILTERING
+// ---------------------------------------------------------
+function applyFilter() {
+  document.querySelectorAll('.match-card').forEach(card => {
+    const owners = (card.dataset.owners || '').split('|');
+    if (activeFilter === 'all') { card.classList.remove('hidden','highlight'); }
+    else if (owners.includes(activeFilter)) { card.classList.remove('hidden'); card.classList.add('highlight'); }
+    else { card.classList.add('hidden'); card.classList.remove('highlight'); }
+  });
+  document.querySelectorAll('.draw-card').forEach(card => {
+    if (activeFilter === 'all') { card.classList.remove('hidden','highlight'); }
+    else if (card.dataset.owner === activeFilter) { card.classList.remove('hidden'); card.classList.add('highlight'); }
+    else { card.classList.add('hidden'); card.classList.remove('highlight'); }
+  });
+}
+
+// ---------------------------------------------------------
+// INIT
+// ---------------------------------------------------------
+function renderAll() {
+  renderMatches();
+  renderDraw();
+  renderGroups();
+  renderStandings();
+}
+
+function init() {
+  // build name filter buttons
+  const nameButtons = document.getElementById('nameButtons');
+  ALL_OWNERS.forEach(owner => {
+    const btn = document.createElement('button');
+    btn.className = 'name-btn';
+    btn.textContent = owner;
+    btn.dataset.owner = owner;
+    nameButtons.appendChild(btn);
+  });
+
+  document.querySelectorAll('.name-btn').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.name-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.owner;
+      applyFilter();
+    };
+  });
+
+  // tab switching
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.onclick = () => {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(tab.dataset.page).classList.add('active');
+      tab.classList.add('active');
+    };
+  });
+
+  fetchMatches();
+  setInterval(fetchMatches, REFRESH_INTERVAL_MS);
+}
+
+init();
 </script>
 </body>
 </html>
