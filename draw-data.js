@@ -8,12 +8,12 @@ const TEAM_DATA = {
   // Group A
   "Mexico":          { owner: "Sharice",    tier: 2, group: "A", flag: "MX" },
   "South Africa":    { owner: "Noud & Liz",  tier: 3, group: "A", flag: "ZA" },
-  "Korea Republic":  { owner: "Wouter",      tier: 2, group: "A", flag: "KR" },
-  "Czech Republic":  { owner: "Jose",        tier: 3, group: "A", flag: "CZ" },
+  "South Korea":  { owner: "Wouter",      tier: 2, group: "A", flag: "KR" },
+  "Czechia":  { owner: "Jose",        tier: 3, group: "A", flag: "CZ" },
 
   // Group B
   "Canada":          { owner: "Sjoerd",      tier: 3, group: "B", flag: "CA" },
-  "Bosnia and Herzegovina": { owner: "Zoë",  tier: 4, group: "B", flag: "BA" },
+  "Bosnia-Herzegovina": { owner: "Zoë",  tier: 4, group: "B", flag: "BA" },
   "Qatar":           { owner: "Ruairi",      tier: 4, group: "B", flag: "QA" },
   "Switzerland":     { owner: "Jose",        tier: 2, group: "B", flag: "CH" },
 
@@ -97,3 +97,50 @@ const OWNER_CLASS = {
 const ALL_OWNERS = ["Danielle","Jim","Jose","Julia","Noud & Liz","Piet","Ruairi","Saskia","Sharice","Sjoerd","Wouter","Zoë"];
 
 const ALL_GROUPS = ["A","B","C","D","E","F","G","H","I","J","K","L"];
+
+// Alternate spellings/names that football-data.org (or other sources) might use,
+// mapped to the canonical key used in TEAM_DATA above.
+const TEAM_ALIASES = {
+  "Korea Republic": "South Korea",
+  "Republic of Korea": "South Korea",
+  "Czech Republic": "Czechia",
+  "Bosnia and Herzegovina": "Bosnia-Herzegovina",
+  "Bosnia & Herzegovina": "Bosnia-Herzegovina",
+  "USA": "United States",
+  "US": "United States",
+  "Turkey": "Türkiye",
+  "Curacao": "Curaçao",
+  "Côte d'Ivoire": "Ivory Coast",
+  "Cote d'Ivoire": "Ivory Coast",
+  "Congo DR": "DR Congo",
+  "DR Congo": "DR Congo",
+  "Democratic Republic of the Congo": "DR Congo",
+  "Cabo Verde": "Cape Verde",
+  "Saudi-Arabia": "Saudi Arabia"
+};
+
+// Strip accents/diacritics and lowercase for robust matching
+function foldName(name) {
+  return (name || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim();
+}
+
+// Build a folded lookup index: foldedName -> canonical TEAM_DATA key
+const FOLDED_INDEX = {};
+Object.keys(TEAM_DATA).forEach(name => { FOLDED_INDEX[foldName(name)] = name; });
+Object.entries(TEAM_ALIASES).forEach(([alt, canonical]) => {
+  FOLDED_INDEX[foldName(alt)] = canonical;
+});
+
+// Look up a team in TEAM_DATA, trying aliases and folded matches if not found directly
+function lookupTeam(name) {
+  if (TEAM_DATA[name]) return TEAM_DATA[name];
+  const alias = TEAM_ALIASES[name];
+  if (alias && TEAM_DATA[alias]) return TEAM_DATA[alias];
+  const folded = FOLDED_INDEX[foldName(name)];
+  if (folded && TEAM_DATA[folded]) return TEAM_DATA[folded];
+  return null;
+}
