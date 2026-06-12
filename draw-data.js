@@ -21,7 +21,7 @@ const TEAM_DATA = {
   "Brazil":          { owner: "Zoë",         tier: 1, group: "C", flag: "🇧🇷" },
   "Morocco":         { owner: "Piet",        tier: 2, group: "C", flag: "🇲🇦" },
   "Haiti":           { owner: "Piet",        tier: 4, group: "C", flag: "🇭🇹" },
-  "Scotland":        { owner: "Zoë",         tier: 3, group: "C", flag: "🏴" },
+  "Scotland":        { owner: "Zoë",         tier: 3, group: "C", flag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿" },
 
   // Group D
   "United States":   { owner: "Jim",         tier: 1, group: "D", flag: "🇺🇸" },
@@ -32,7 +32,7 @@ const TEAM_DATA = {
   // Group E
   "Germany":         { owner: "Piet",        tier: 1, group: "E", flag: "🇩🇪" },
   "Curaçao":         { owner: "Jim",         tier: 4, group: "E", flag: "🇨🇼" },
-  "Ivory Coast":     { owner: "Ruairi",      tier: 3, group: "E", flag: "🇨🇮" },
+  "Ivory Coast":     { owner: "Sharice",     tier: 3, group: "E", flag: "🇨🇮" },
   "Ecuador":         { owner: "Ruairi",      tier: 2, group: "E", flag: "🇪🇨" },
 
   // Group F
@@ -72,7 +72,7 @@ const TEAM_DATA = {
   "Colombia":        { owner: "Ruairi",      tier: 1, group: "K", flag: "🇨🇴" },
 
   // Group L
-  "England":         { owner: "Saskia",      tier: 1, group: "L", flag: "🏴" },
+  "England":         { owner: "Saskia",      tier: 1, group: "L", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
   "Croatia":         { owner: "Piet",        tier: 3, group: "L", flag: "🇭🇷" },
   "Ghana":           { owner: "Ruairi",      tier: 3, group: "L", flag: "🇬🇭" },
   "Panama":          { owner: "Sjoerd",      tier: 4, group: "L", flag: "🇵🇦" }
