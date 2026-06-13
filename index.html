@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Family World Cup 2026 🏆</title>
+<title>Familie WK 2026 🏆</title>
 <style>
   :root {
     --gold: #FFD23F;
@@ -266,25 +266,25 @@
 
 <header>
   <div class="trophy">🏆</div>
-  <h1>World Cup 2026</h1>
-  <p>Family Sweepstake · USA · Canada · Mexico</p>
-  <div class="dates-badge">11 June – 19 July 2026</div>
+  <h1>WK 2026</h1>
+  <p>Familie Voetbalpool · VS · Canada · Mexico</p>
+  <div class="dates-badge">11 juni – 19 juli 2026</div>
 </header>
 
 <div class="filter-wrap">
-  <div class="filter-label">Jump to your hub</div>
+  <div class="filter-label">Ga naar jouw hub</div>
   <div class="names" id="nameButtons">
-    <button class="name-btn active" data-owner="all">All</button>
+    <button class="name-btn active" data-owner="all">Iedereen</button>
   </div>
 </div>
 
 <div class="tabs">
-  <div class="tab active" data-page="today">Today's Games</div>
-  <div class="tab" data-page="draw">The Draw</div>
-  <div class="tab" data-page="groups">Groups</div>
-  <div class="tab" data-page="standings">Standings</div>
-  <div class="tab" data-page="bracket">Bracket</div>
-  <div class="tab hidden" data-page="personal" id="personalTab">👤 Your Hub</div>
+  <div class="tab active" data-page="today">Wedstrijden Vandaag</div>
+  <div class="tab" data-page="draw">De Loting</div>
+  <div class="tab" data-page="groups">Groepen</div>
+  <div class="tab" data-page="standings">Stand</div>
+  <div class="tab" data-page="bracket">Knock-out</div>
+  <div class="tab hidden" data-page="personal" id="personalTab">👤 Jouw Hub</div>
 </div>
 
 <div class="content">
@@ -293,16 +293,16 @@
   <div id="today" class="page active">
     <div class="info-bar">
       <span class="live-pill"><span class="live-dot"></span>Live</span>
-      <span id="lastUpdated">Loading data...</span>
+      <span id="lastUpdated">Gegevens laden...</span>
     </div>
     <div id="matchesContainer">
-      <div class="loading"><div class="spinner"></div>Fetching latest match data…</div>
+      <div class="loading"><div class="spinner"></div>Laatste wedstrijdgegevens ophalen…</div>
     </div>
   </div>
 
   <!-- DRAW -->
   <div id="draw" class="page">
-    <div class="section-title">The Draw</div>
+    <div class="section-title">De Loting</div>
     <div class="legend">
       <div class="legend-item"><span class="ldot t1"></span>Pot 1 — Elite</div>
       <div class="legend-item"><span class="ldot t2"></span>Pot 2 — Sterk</div>
@@ -310,62 +310,62 @@
       <div class="legend-item"><span class="ldot t4"></span>Pot 4 — Underdogs</div>
     </div>
     <div class="legend" style="margin-top:-8px">
-      <div class="legend-item"><span class="qual-badge">Q</span> = Qualified directly (top 2)</div>
-      <div class="legend-item"><span class="qual-badge pending-badge">3rd?</span> = 3rd place — may qualify as best-3rd wildcard</div>
-      <div class="legend-item">Strikethrough = Eliminated</div>
+      <div class="legend-item"><span class="qual-badge">Q</span> = Direct gekwalificeerd (top 2)</div>
+      <div class="legend-item"><span class="qual-badge pending-badge">3e?</span> = 3e plaats — mogelijk via beste nr. 3 wildcard</div>
+      <div class="legend-item">Doorgestreept = Uitgeschakeld</div>
     </div>
     <div class="draw-grid" id="drawGrid"></div>
   </div>
 
   <!-- GROUPS -->
   <div id="groups" class="page">
-    <div class="section-title">All 12 Groups</div>
+    <div class="section-title">Alle 12 Groepen</div>
     <div class="groups-grid" id="groupsGrid"></div>
   </div>
 
   <!-- STANDINGS -->
   <div id="standings" class="page">
-    <div class="section-title">Who's Still In?</div>
+    <div class="section-title">Wie Staat Er Nog In?</div>
     <div class="standings-wrap">
       <table class="standings-table">
         <thead>
-          <tr><th>#</th><th>Owner</th><th>Teams</th><th style="text-align:center">Active</th></tr>
+          <tr><th>#</th><th>Eigenaar</th><th>Teams</th><th style="text-align:center">Actief</th></tr>
         </thead>
         <tbody id="standingsBody"></tbody>
       </table>
     </div>
     <p style="font-size:0.72rem;color:var(--muted);margin-top:10px;padding:0 2px;">
-      "Active" = teams not yet mathematically eliminated from the tournament.
+      "Actief" = teams die nog niet wiskundig zijn uitgeschakeld van het toernooi.
     </p>
   </div>
 
   <!-- BRACKET -->
   <div id="bracket" class="page">
-    <div class="section-title">Knockout Bracket</div>
+    <div class="section-title">Knock-out Schema</div>
     <div class="bracket-msg" id="bracketContent">
       <div class="icon">⏳</div>
-      <h3>Group Stage in Progress</h3>
-      <p>The Round of 32 bracket populates here once the group stage is complete.<br><br>
-      Top 2 from each group + 8 best 3rd-place teams advance — 32 teams total.<br><br>
-      <strong style="color:var(--gold)">Final: Sunday 19 July 2026 · MetLife Stadium, New Jersey</strong></p>
+      <h3>Groepsfase Loopt Nog</h3>
+      <p>Het schema voor de laatste 32 wordt hier ingevuld zodra de groepsfase is afgelopen.<br><br>
+      Top 2 van elke groep + 8 beste nr. 3-teams gaan door — 32 teams in totaal.<br><br>
+      <strong style="color:var(--gold)">Finale: zondag 19 juli 2026 · MetLife Stadium, New Jersey</strong></p>
     </div>
   </div>
 
   <!-- YOUR HUB (personal dashboard) -->
   <div id="personal" class="page">
-    <div class="section-title" id="personalTitle">Your Hub</div>
+    <div class="section-title" id="personalTitle">Jouw Hub</div>
     <div class="personal-grid">
       <div class="personal-main">
-        <div class="match-day-label">Your Matches</div>
+        <div class="match-day-label">Jouw Wedstrijden</div>
         <div id="personalMatches"></div>
       </div>
       <div class="personal-side">
         <div class="side-block">
-          <div class="side-title">Your Teams</div>
+          <div class="side-title">Jouw Teams</div>
           <div id="personalTeams"></div>
         </div>
         <div class="side-block">
-          <div class="side-title">Your Groups</div>
+          <div class="side-title">Jouw Groepen</div>
           <div id="personalGroups"></div>
         </div>
       </div>
@@ -375,8 +375,8 @@
 </div>
 
 <footer>
-  <strong>Family World Cup 2026</strong> · 48 teams · 12 owners · 1 trophy 🏆<br>
-  <span style="margin-top:4px;display:inline-block;color:#555;">Live data refreshes every 5 minutes</span>
+  <strong>Familie WK 2026</strong> · 48 teams · 12 eigenaren · 1 beker 🏆<br>
+  <span style="margin-top:4px;display:inline-block;color:#555;">Live data wordt elke 5 minuten bijgewerkt</span>
 </footer>
 
 <!-- DRAW DATA -->
@@ -465,12 +465,12 @@ async function fetchMatches() {
       id: r[idx.id]
     }));
     document.getElementById('lastUpdated').textContent =
-      'Last refreshed ' + new Date().toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'}) + ' · ' + allMatches.length + ' matches loaded';
+      'Laatst bijgewerkt ' + new Date().toLocaleTimeString('nl-NL', {hour:'2-digit',minute:'2-digit'}) + ' · ' + allMatches.length + ' wedstrijden geladen';
     renderAll();
   } catch (err) {
-    document.getElementById('lastUpdated').textContent = 'Could not load live data — showing cached view';
+    document.getElementById('lastUpdated').textContent = 'Kon live data niet laden — toont gecachte versie';
     document.getElementById('matchesContainer').innerHTML =
-      '<div class="loading">⚠️ Could not reach the data sheet.<br>Check the CSV publish link is still active.</div>';
+      '<div class="loading">⚠️ Kon het gegevensbestand niet bereiken.<br>Controleer of de CSV-link nog actief is.</div>';
     console.error(err);
   }
 }
@@ -565,7 +565,7 @@ function matchCardHTML(m) {
   if (m.status === 'FINISHED') scoreClass = 'finished';
   if (m.homeScore !== null && m.awayScore !== null) scoreText = `${m.homeScore} · ${m.awayScore}`;
 
-  const timeStr = m.date ? new Date(m.date).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) : '--:--';
+  const timeStr = m.date ? new Date(m.date).toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'}) : '--:--';
 
   const homeOwnerTag = homeData.owner ? `<span class="owner-tag ${OWNER_CLASS[homeData.owner]||''}">${homeData.owner}</span>` : '';
   const awayOwnerTag = awayData.owner ? `<span class="owner-tag ${OWNER_CLASS[awayData.owner]||''}">${awayData.owner}</span>` : '';
@@ -595,7 +595,7 @@ function matchCardHTML(m) {
 function renderMatches() {
   const container = document.getElementById('matchesContainer');
   if (!allMatches.length) {
-    container.innerHTML = '<div class="loading">No match data yet.</div>';
+    container.innerHTML = '<div class="loading">Nog geen wedstrijdgegevens.</div>';
     return;
   }
 
@@ -612,7 +612,7 @@ function renderMatches() {
   container.innerHTML = dates.map(d => {
     const matches = byDate[d];
     const dt = new Date(d);
-    const label = dt.toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'});
+    const label = dt.toLocaleDateString('nl-NL', {weekday:'short', day:'numeric', month:'short'});
     const isPast = d < todayStr;
     const sectionId = 'day-' + d;
 
@@ -622,7 +622,7 @@ function renderMatches() {
       return `<div class="day-section collapsed" id="${sectionId}" data-count="${matches.length}">
         <div class="day-header" data-target="${sectionId}">
           <span>${label}</span>
-          <span class="day-meta">${matches.length} match${matches.length>1?'es':''} · tap to expand <span class="chevron">▸</span></span>
+          <span class="day-meta">${matches.length} wedstrijd${matches.length>1?'en':''} · tik om uit te vouwen <span class="chevron">▸</span></span>
         </div>
         <div class="day-body">${cardsHTML}</div>
       </div>`;
@@ -630,7 +630,7 @@ function renderMatches() {
       return `<div class="day-section" id="${sectionId}" data-count="${matches.length}">
         <div class="day-header" data-target="${sectionId}">
           <span>${label}</span>
-          <span class="day-meta">${matches.length} match${matches.length>1?'es':''} <span class="chevron">▾</span></span>
+          <span class="day-meta">${matches.length} wedstrijd${matches.length>1?'en':''} <span class="chevron">▾</span></span>
         </div>
         <div class="day-body">${cardsHTML}</div>
       </div>`;
@@ -645,9 +645,9 @@ function renderMatches() {
       const meta = h.querySelector('.day-meta');
       const count = section.dataset.count;
       if (collapsed) {
-        meta.innerHTML = `${count} match${count>1?'es':''} · tap to expand <span class="chevron">▸</span>`;
+        meta.innerHTML = `${count} wedstrijd${count>1?'en':''} · tik om uit te vouwen <span class="chevron">▸</span>`;
       } else {
-        meta.innerHTML = `${count} match${count>1?'es':''} <span class="chevron">▾</span>`;
+        meta.innerHTML = `${count} wedstrijd${count>1?'en':''} <span class="chevron">▾</span>`;
       }
     };
   });
@@ -680,7 +680,7 @@ function renderDraw() {
       </div>`;
     }).join('');
     return `<div class="draw-card" data-owner="${owner}">
-      <div class="draw-owner">🎯 ${owner} <span class="owner-count">${activeCount} active</span></div>
+      <div class="draw-owner">🎯 ${owner} <span class="owner-count">${activeCount} actief</span></div>
       ${rows}
     </div>`;
   }).join('');
@@ -770,7 +770,7 @@ function switchTab(pageId) {
 // YOUR HUB (personal dashboard)
 // ---------------------------------------------------------
 function renderPersonal(owner) {
-  document.getElementById('personalTitle').textContent = `Hi ${owner} 👋 — Your Hub`;
+  document.getElementById('personalTitle').textContent = `Hoi ${owner} 👋 — Jouw Hub`;
 
   const myTeams = Object.entries(TEAM_DATA)
     .filter(([name, d]) => d.owner === owner)
@@ -825,7 +825,7 @@ function renderPersonal(owner) {
     .sort((a,b) => new Date(a.date) - new Date(b.date));
 
   if (!myMatches.length) {
-    matchesEl.innerHTML = '<div class="loading">No matches found yet for your teams.</div>';
+    matchesEl.innerHTML = '<div class="loading">Nog geen wedstrijden gevonden voor jouw teams.</div>';
     return;
   }
 
@@ -840,8 +840,8 @@ function renderPersonal(owner) {
     if (m.homeScore !== null && m.awayScore !== null) scoreText = `${m.homeScore} · ${m.awayScore}`;
 
     const dateObj = new Date(m.date);
-    const dateStr = dateObj.toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short', timeZone:'Europe/Amsterdam'});
-    const timeStr = dateObj.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit', timeZone:'Europe/Amsterdam'});
+    const dateStr = dateObj.toLocaleDateString('nl-NL', {weekday:'short', day:'numeric', month:'short', timeZone:'Europe/Amsterdam'});
+    const timeStr = dateObj.toLocaleTimeString('nl-NL', {hour:'2-digit', minute:'2-digit', timeZone:'Europe/Amsterdam'});
 
     const venue = getVenue(m.group);
 
@@ -851,7 +851,7 @@ function renderPersonal(owner) {
     return `<div class="pmatch-card">
       <div class="pmatch-top">
         <span class="pmatch-date">${dateStr}</span>
-        <span class="pmatch-kickoff">⏰ ${timeStr} NL time</span>
+        <span class="pmatch-kickoff">⏰ ${timeStr} NL tijd</span>
         <span class="pmatch-venue">📍 ${venue}</span>
       </div>
       <div class="teams-row">
@@ -874,7 +874,7 @@ function renderPersonal(owner) {
 // Venue/stadium data isn't included in the football-data.org match feed,
 // so we can't show the actual stadium here without an additional data source.
 function getVenue(group) {
-  return 'see official schedule';
+  return 'zie officieel schema';
 }
 
 function init() {
