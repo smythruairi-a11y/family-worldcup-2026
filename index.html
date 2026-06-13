@@ -92,6 +92,7 @@
   .tab[data-page="groups"].active    { background: var(--blue); }
   .tab[data-page="standings"].active { background: var(--red); }
   .tab[data-page="bracket"].active   { background: var(--blue); }
+  .tab[data-page="personal"].active  { background: var(--purple); }
 
   .content { padding:14px; max-width:960px; margin:0 auto; }
   .page { display:none; }
@@ -216,16 +217,49 @@
   footer { text-align:center; padding:20px; color:var(--muted); font-size:0.73rem; border-top:1px solid var(--border); margin-top:24px; font-weight:600; }
   footer strong { color:var(--text); }
 
-  .day-nav { display:flex; gap:8px; overflow-x:auto; padding-bottom:8px; margin-bottom:4px; scrollbar-width:none; }
-  .day-nav::-webkit-scrollbar { display:none; }
-  .day-btn {
-    flex:none; padding:6px 14px; border-radius:8px; border:1px solid var(--border);
-    background:var(--card); color:var(--muted); font-size:0.75rem; cursor:pointer;
-    font-family:inherit; font-weight:700; white-space:nowrap; transition:transform 0.15s, all 0.15s;
+  /* YOUR HUB */
+  .tab.hidden { display:none; }
+  .personal-grid { display:grid; grid-template-columns: 1fr; gap:16px; }
+  @media (min-width: 760px) {
+    .personal-grid { grid-template-columns: 1fr 300px; gap:18px; align-items:start; }
+    .personal-main { order:1; }
+    .personal-side { order:2; }
   }
-  .day-btn.active { background:var(--blue); color:#fff; border-color:var(--blue); }
-  .day-btn:hover:not(.active) { color:var(--blue); border-color:var(--blue); transform:translateY(-1px); }
-  .day-btn:active { transform:scale(0.95); }
+  .personal-side { display:flex; flex-direction:column; gap:14px; }
+  .side-block { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:12px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+  .side-title { font-size:0.7rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); font-weight:800; margin-bottom:8px; }
+  .ph-team-row { display:flex; align-items:center; gap:8px; padding:5px 0; font-size:0.85rem; font-weight:700; border-bottom:1px solid var(--border); }
+  .ph-team-row:last-child { border-bottom:none; }
+  .ph-team-row.elim { opacity:0.35; }
+  .ph-team-row.elim .tname { text-decoration:line-through; }
+  .ph-group-card { margin-bottom:10px; }
+  .ph-group-card:last-child { margin-bottom:0; }
+  .ph-group-card h5 { font-size:0.78rem; font-weight:900; color:var(--text); margin-bottom:4px; }
+  .ph-group-card .gp-table td.your-team { background:var(--card2); font-weight:800; }
+  .pmatch-card {
+    background:var(--card); border:1px solid var(--border); border-radius:12px;
+    padding:12px 14px; margin-bottom:8px; box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  }
+  .pmatch-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; flex-wrap:wrap; gap:6px; }
+  .pmatch-date { font-size:0.7rem; color:var(--muted); font-weight:800; text-transform:uppercase; letter-spacing:0.5px; }
+  .pmatch-kickoff { font-size:0.7rem; color:var(--blue); font-weight:800; }
+  .pmatch-venue { font-size:0.7rem; color:var(--muted); font-weight:600; }
+
+  /* COLLAPSIBLE DAY SECTIONS */
+  .day-section { margin-bottom:10px; }
+  .day-header {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:10px 14px; border-radius:10px; cursor:pointer;
+    background:var(--card2); border:1px solid var(--border);
+    font-size:0.78rem; font-weight:800; text-transform:uppercase; letter-spacing:1px;
+    color:var(--text); transition:background 0.15s;
+  }
+  .day-header:hover { background:#E4E7F7; }
+  .day-meta { font-size:0.7rem; color:var(--muted); text-transform:none; letter-spacing:0; font-weight:600; display:flex; align-items:center; gap:6px; }
+  .chevron { display:inline-block; }
+  .day-body { margin-top:8px; }
+  .day-section.collapsed .day-body { display:none; }
+  .day-section.collapsed .day-header { background:var(--card); }
 </style>
 </head>
 <body>
@@ -238,7 +272,7 @@
 </header>
 
 <div class="filter-wrap">
-  <div class="filter-label">Filter by owner</div>
+  <div class="filter-label">Jump to your hub</div>
   <div class="names" id="nameButtons">
     <button class="name-btn active" data-owner="all">All</button>
   </div>
@@ -250,6 +284,7 @@
   <div class="tab" data-page="groups">Groups</div>
   <div class="tab" data-page="standings">Standings</div>
   <div class="tab" data-page="bracket">Bracket</div>
+  <div class="tab hidden" data-page="personal" id="personalTab">👤 Your Hub</div>
 </div>
 
 <div class="content">
@@ -260,7 +295,6 @@
       <span class="live-pill"><span class="live-dot"></span>Live</span>
       <span id="lastUpdated">Loading data...</span>
     </div>
-    <div class="day-nav" id="dayNav"></div>
     <div id="matchesContainer">
       <div class="loading"><div class="spinner"></div>Fetching latest match data…</div>
     </div>
@@ -317,6 +351,27 @@
     </div>
   </div>
 
+  <!-- YOUR HUB (personal dashboard) -->
+  <div id="personal" class="page">
+    <div class="section-title" id="personalTitle">Your Hub</div>
+    <div class="personal-grid">
+      <div class="personal-main">
+        <div class="match-day-label">Your Matches</div>
+        <div id="personalMatches"></div>
+      </div>
+      <div class="personal-side">
+        <div class="side-block">
+          <div class="side-title">Your Teams</div>
+          <div id="personalTeams"></div>
+        </div>
+        <div class="side-block">
+          <div class="side-title">Your Groups</div>
+          <div id="personalGroups"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <footer>
@@ -337,7 +392,6 @@ const REFRESH_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 
 let activeFilter = 'all';
 let allMatches = [];
-let activeDay = null;
 
 // ---------------------------------------------------------
 // CSV PARSER (simple, handles quoted fields)
@@ -500,9 +554,46 @@ function getTeamStatus(teamName) {
 // ---------------------------------------------------------
 // RENDER: TODAY'S GAMES (grouped by day)
 // ---------------------------------------------------------
+function matchCardHTML(m) {
+  const homeData = lookupTeam(m.home) || {flag:'??', owner:null};
+  const awayData = lookupTeam(m.away) || {flag:'??', owner:null};
+  const owners = [homeData.owner, awayData.owner].filter(Boolean);
+
+  let scoreClass = '';
+  let scoreText = '– · –';
+  if (m.status === 'IN_PLAY' || m.status === 'PAUSED') scoreClass = 'live';
+  if (m.status === 'FINISHED') scoreClass = 'finished';
+  if (m.homeScore !== null && m.awayScore !== null) scoreText = `${m.homeScore} · ${m.awayScore}`;
+
+  const timeStr = m.date ? new Date(m.date).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) : '--:--';
+
+  const homeOwnerTag = homeData.owner ? `<span class="owner-tag ${OWNER_CLASS[homeData.owner]||''}">${homeData.owner}</span>` : '';
+  const awayOwnerTag = awayData.owner ? `<span class="owner-tag ${OWNER_CLASS[awayData.owner]||''}">${awayData.owner}</span>` : '';
+
+  return `<div class="match-card" data-owners="${owners.join('|')}">
+    <div class="match-time">${timeStr}</div>
+    <div class="match-body">
+      <div class="teams-row">
+        <div class="team-col">
+          <div class="team-name"><span class="flag">${homeData.flag}</span> ${m.home}</div>
+          ${homeOwnerTag}
+        </div>
+        <span class="vs">vs</span>
+        <div class="team-col">
+          <div class="team-name"><span class="flag">${awayData.flag}</span> ${m.away}</div>
+          ${awayOwnerTag}
+        </div>
+      </div>
+      <div class="match-meta">
+        <span class="group-pill">${m.group || ''}</span>
+      </div>
+    </div>
+    <div class="score-box ${scoreClass}">${scoreText}</div>
+  </div>`;
+}
+
 function renderMatches() {
   const container = document.getElementById('matchesContainer');
-  const dayNav = document.getElementById('dayNav');
   if (!allMatches.length) {
     container.innerHTML = '<div class="loading">No match data yet.</div>';
     return;
@@ -516,67 +607,50 @@ function renderMatches() {
     byDate[d].push(m);
   });
   const dates = Object.keys(byDate).filter(d=>d).sort();
+  const todayStr = new Date().toISOString().slice(0,10);
 
-  // default to today if available, else first date with matches
-  if (!activeDay || !byDate[activeDay]) {
-    const todayStr = new Date().toISOString().slice(0,10);
-    activeDay = byDate[todayStr] ? todayStr : dates[0];
-  }
-
-  // day nav buttons
-  dayNav.innerHTML = dates.map(d => {
+  container.innerHTML = dates.map(d => {
+    const matches = byDate[d];
     const dt = new Date(d);
     const label = dt.toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'});
-    return `<button class="day-btn ${d===activeDay?'active':''}" data-day="${d}">${label}</button>`;
+    const isPast = d < todayStr;
+    const sectionId = 'day-' + d;
+
+    const cardsHTML = matches.map(matchCardHTML).join('');
+
+    if (isPast) {
+      return `<div class="day-section collapsed" id="${sectionId}" data-count="${matches.length}">
+        <div class="day-header" data-target="${sectionId}">
+          <span>${label}</span>
+          <span class="day-meta">${matches.length} match${matches.length>1?'es':''} · tap to expand <span class="chevron">▸</span></span>
+        </div>
+        <div class="day-body">${cardsHTML}</div>
+      </div>`;
+    } else {
+      return `<div class="day-section" id="${sectionId}" data-count="${matches.length}">
+        <div class="day-header" data-target="${sectionId}">
+          <span>${label}</span>
+          <span class="day-meta">${matches.length} match${matches.length>1?'es':''} <span class="chevron">▾</span></span>
+        </div>
+        <div class="day-body">${cardsHTML}</div>
+      </div>`;
+    }
   }).join('');
 
-  dayNav.querySelectorAll('.day-btn').forEach(btn => {
-    btn.onclick = () => { activeDay = btn.dataset.day; renderMatches(); };
+  // toggle handlers
+  container.querySelectorAll('.day-header').forEach(h => {
+    h.onclick = () => {
+      const section = document.getElementById(h.dataset.target);
+      const collapsed = section.classList.toggle('collapsed');
+      const meta = h.querySelector('.day-meta');
+      const count = section.dataset.count;
+      if (collapsed) {
+        meta.innerHTML = `${count} match${count>1?'es':''} · tap to expand <span class="chevron">▸</span>`;
+      } else {
+        meta.innerHTML = `${count} match${count>1?'es':''} <span class="chevron">▾</span>`;
+      }
+    };
   });
-
-  const matches = byDate[activeDay] || [];
-  if (!matches.length) {
-    container.innerHTML = '<div class="loading">No matches scheduled this day.</div>';
-    return;
-  }
-
-  container.innerHTML = matches.map(m => {
-    const homeData = lookupTeam(m.home) || {flag:'??', owner:null};
-    const awayData = lookupTeam(m.away) || {flag:'??', owner:null};
-    const owners = [homeData.owner, awayData.owner].filter(Boolean);
-
-    let scoreClass = '';
-    let scoreText = '– · –';
-    if (m.status === 'IN_PLAY' || m.status === 'PAUSED') scoreClass = 'live';
-    if (m.status === 'FINISHED') scoreClass = 'finished';
-    if (m.homeScore !== null && m.awayScore !== null) scoreText = `${m.homeScore} · ${m.awayScore}`;
-
-    const timeStr = m.date ? new Date(m.date).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) : '--:--';
-
-    const homeOwnerTag = homeData.owner ? `<span class="owner-tag ${OWNER_CLASS[homeData.owner]||''}">${homeData.owner}</span>` : '';
-    const awayOwnerTag = awayData.owner ? `<span class="owner-tag ${OWNER_CLASS[awayData.owner]||''}">${awayData.owner}</span>` : '';
-
-    return `<div class="match-card" data-owners="${owners.join('|')}">
-      <div class="match-time">${timeStr}</div>
-      <div class="match-body">
-        <div class="teams-row">
-          <div class="team-col">
-            <div class="team-name"><span class="flag">${homeData.flag}</span> ${m.home}</div>
-            ${homeOwnerTag}
-          </div>
-          <span class="vs">vs</span>
-          <div class="team-col">
-            <div class="team-name"><span class="flag">${awayData.flag}</span> ${m.away}</div>
-            ${awayOwnerTag}
-          </div>
-        </div>
-        <div class="match-meta">
-          <span class="group-pill">${m.group || ''}</span>
-        </div>
-      </div>
-      <div class="score-box ${scoreClass}">${scoreText}</div>
-    </div>`;
-  }).join('');
 
   applyFilter();
 }
@@ -696,6 +770,129 @@ function renderAll() {
   renderDraw();
   renderGroups();
   renderStandings();
+  if (activeFilter !== 'all') renderPersonal(activeFilter);
+}
+
+// ---------------------------------------------------------
+// TAB SWITCHING
+// ---------------------------------------------------------
+function switchTab(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(pageId).classList.add('active');
+  const tab = document.querySelector(`.tab[data-page="${pageId}"]`);
+  if (tab) tab.classList.add('active');
+}
+
+// ---------------------------------------------------------
+// YOUR HUB (personal dashboard)
+// ---------------------------------------------------------
+function renderPersonal(owner) {
+  document.getElementById('personalTitle').textContent = `Hi ${owner} 👋 — Your Hub`;
+
+  const myTeams = Object.entries(TEAM_DATA)
+    .filter(([name, d]) => d.owner === owner)
+    .map(([name, d]) => ({ name, ...d }));
+
+  // --- Your Teams ---
+  const teamsEl = document.getElementById('personalTeams');
+  teamsEl.innerHTML = myTeams.map(t => {
+    const status = getTeamStatus(t.name);
+    const elimClass = status === 'eliminated_group' ? 'elim' : '';
+    let badge = '';
+    if (status === 'qualified') badge = '<span class="qual-badge">Q</span>';
+    else if (status === 'pending') badge = '<span class="qual-badge pending-badge">3rd?</span>';
+    return `<div class="ph-team-row ${elimClass}">
+      <span class="flag">${t.flag}</span>
+      <span class="tname">${t.name}</span>
+      ${badge}
+      <span class="tier-dot t${t.tier}" style="margin-left:auto"></span>
+    </div>`;
+  }).join('');
+
+  // --- Your Groups ---
+  const groupsEl = document.getElementById('personalGroups');
+  const myGroups = [...new Set(myTeams.map(t => t.group))].sort();
+  groupsEl.innerHTML = myGroups.map(group => {
+    const table = computeGroupTable(group);
+    const rows = table.map(r => {
+      const data = TEAM_DATA[r.team];
+      const isMine = data.owner === owner;
+      return `<tr>
+        <td class="${isMine ? 'your-team' : ''}">${data.flag} ${r.team}</td>
+        <td>${r.played}</td>
+        <td>${r.gd > 0 ? '+'+r.gd : r.gd}</td>
+        <td>${r.pts}</td>
+      </tr>`;
+    }).join('');
+    return `<div class="ph-group-card">
+      <h5>Group ${group}</h5>
+      <table class="gp-table">
+        <tr><th>Team</th><th>P</th><th>GD</th><th>Pts</th></tr>
+        ${rows}
+      </table>
+    </div>`;
+  }).join('');
+
+  // --- Your Matches ---
+  const matchesEl = document.getElementById('personalMatches');
+  const myTeamNames = myTeams.map(t => t.name);
+  const myMatches = allMatches
+    .filter(m => myTeamNames.includes(m.home) || myTeamNames.includes(m.away))
+    .filter(m => m.date)
+    .sort((a,b) => new Date(a.date) - new Date(b.date));
+
+  if (!myMatches.length) {
+    matchesEl.innerHTML = '<div class="loading">No matches found yet for your teams.</div>';
+    return;
+  }
+
+  matchesEl.innerHTML = myMatches.map(m => {
+    const homeData = lookupTeam(m.home) || {flag:'??', owner:null};
+    const awayData = lookupTeam(m.away) || {flag:'??', owner:null};
+
+    let scoreClass = '';
+    let scoreText = '– · –';
+    if (m.status === 'IN_PLAY' || m.status === 'PAUSED') scoreClass = 'live';
+    if (m.status === 'FINISHED') scoreClass = 'finished';
+    if (m.homeScore !== null && m.awayScore !== null) scoreText = `${m.homeScore} · ${m.awayScore}`;
+
+    const dateObj = new Date(m.date);
+    const dateStr = dateObj.toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short', timeZone:'Europe/Amsterdam'});
+    const timeStr = dateObj.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit', timeZone:'Europe/Amsterdam'});
+
+    const venue = getVenue(m.group);
+
+    const homeOwnerTag = homeData.owner ? `<span class="owner-tag ${OWNER_CLASS[homeData.owner]||''}">${homeData.owner}</span>` : '';
+    const awayOwnerTag = awayData.owner ? `<span class="owner-tag ${OWNER_CLASS[awayData.owner]||''}">${awayData.owner}</span>` : '';
+
+    return `<div class="pmatch-card">
+      <div class="pmatch-top">
+        <span class="pmatch-date">${dateStr}</span>
+        <span class="pmatch-kickoff">⏰ ${timeStr} NL time</span>
+        <span class="pmatch-venue">📍 ${venue}</span>
+      </div>
+      <div class="teams-row">
+        <div class="team-col">
+          <div class="team-name"><span class="flag">${homeData.flag}</span> ${m.home}</div>
+          ${homeOwnerTag}
+        </div>
+        <span class="vs">vs</span>
+        <div class="team-col">
+          <div class="team-name"><span class="flag">${awayData.flag}</span> ${m.away}</div>
+          ${awayOwnerTag}
+        </div>
+        <div class="score-box ${scoreClass}">${scoreText}</div>
+      </div>
+      <div class="match-meta"><span class="group-pill">${m.group || ''}</span></div>
+    </div>`;
+  }).join('');
+}
+
+// Venue/stadium data isn't included in the football-data.org match feed,
+// so we can't show the actual stadium here without an additional data source.
+function getVenue(group) {
+  return 'see official schedule';
 }
 
 function init() {
@@ -715,17 +912,25 @@ function init() {
       btn.classList.add('active');
       activeFilter = btn.dataset.owner;
       applyFilter();
+
+      const personalTab = document.getElementById('personalTab');
+      if (activeFilter === 'all') {
+        personalTab.classList.add('hidden');
+        if (document.getElementById('personal').classList.contains('active')) {
+          switchTab('today');
+        }
+      } else {
+        personalTab.classList.remove('hidden');
+        personalTab.textContent = `👤 ${activeFilter}`;
+        renderPersonal(activeFilter);
+        switchTab('personal');
+      }
     };
   });
 
   // tab switching
   document.querySelectorAll('.tab').forEach(tab => {
-    tab.onclick = () => {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.getElementById(tab.dataset.page).classList.add('active');
-      tab.classList.add('active');
-    };
+    tab.onclick = () => switchTab(tab.dataset.page);
   });
 
   fetchMatches();
