@@ -390,7 +390,7 @@
 const MATCHES_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRMSwx5xskz1svT0fFLy5sFzNq6N5hqIx_ZLxmFgWYESisXs5H0dBipecSAS-TZFMWJ013VwISIs_NW/pub?gid=0&single=true&output=csv";
 const REFRESH_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 
-let activeFilter = 'all';
+let activeOwner = 'all';
 let allMatches = [];
 
 // ---------------------------------------------------------
@@ -651,8 +651,6 @@ function renderMatches() {
       }
     };
   });
-
-  applyFilter();
 }
 
 // ---------------------------------------------------------
@@ -686,8 +684,6 @@ function renderDraw() {
       ${rows}
     </div>`;
   }).join('');
-
-  applyFilter();
 }
 
 // ---------------------------------------------------------
@@ -748,20 +744,6 @@ function renderStandings() {
 // ---------------------------------------------------------
 // FILTERING
 // ---------------------------------------------------------
-function applyFilter() {
-  document.querySelectorAll('.match-card').forEach(card => {
-    const owners = (card.dataset.owners || '').split('|');
-    if (activeFilter === 'all') { card.classList.remove('hidden','highlight'); }
-    else if (owners.includes(activeFilter)) { card.classList.remove('hidden'); card.classList.add('highlight'); }
-    else { card.classList.add('hidden'); card.classList.remove('highlight'); }
-  });
-  document.querySelectorAll('.draw-card').forEach(card => {
-    if (activeFilter === 'all') { card.classList.remove('hidden','highlight'); }
-    else if (card.dataset.owner === activeFilter) { card.classList.remove('hidden'); card.classList.add('highlight'); }
-    else { card.classList.add('hidden'); card.classList.remove('highlight'); }
-  });
-}
-
 // ---------------------------------------------------------
 // INIT
 // ---------------------------------------------------------
@@ -770,7 +752,7 @@ function renderAll() {
   renderDraw();
   renderGroups();
   renderStandings();
-  if (activeFilter !== 'all') renderPersonal(activeFilter);
+  if (activeOwner !== 'all') renderPersonal(activeOwner);
 }
 
 // ---------------------------------------------------------
@@ -910,19 +892,18 @@ function init() {
     btn.onclick = () => {
       document.querySelectorAll('.name-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      activeFilter = btn.dataset.owner;
-      applyFilter();
+      activeOwner = btn.dataset.owner;
 
       const personalTab = document.getElementById('personalTab');
-      if (activeFilter === 'all') {
+      if (activeOwner === 'all') {
         personalTab.classList.add('hidden');
         if (document.getElementById('personal').classList.contains('active')) {
           switchTab('today');
         }
       } else {
         personalTab.classList.remove('hidden');
-        personalTab.textContent = `👤 ${activeFilter}`;
-        renderPersonal(activeFilter);
+        personalTab.textContent = `👤 ${activeOwner}`;
+        renderPersonal(activeOwner);
         switchTab('personal');
       }
     };
