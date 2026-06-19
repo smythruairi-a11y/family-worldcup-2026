@@ -116,6 +116,7 @@ const TEAM_ALIASES = {
   "DR Congo": "DR Congo",
   "Democratic Republic of the Congo": "DR Congo",
   "Cabo Verde": "Cape Verde",
+  "Cape Verde Islands": "Cape Verde",
   "Saudi-Arabia": "Saudi Arabia"
 };
 
