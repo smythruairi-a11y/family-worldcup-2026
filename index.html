@@ -229,34 +229,121 @@
   .status-active  { background:#e6fbf6; color:#00917a; border:1px solid #b5f1e5; }
 
   /* BRACKET */
-  .bracket-legend { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
+  .bracket-legend { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
   .bl-item { font-size:0.72rem; font-weight:700; padding:3px 10px; border-radius:10px; }
   .confirmed    { background:#dbeafe; color:#1d4ed8; border:1px solid #93c5fd; }
   .potential    { background:#f1f5f9; color:#94a3b8; border:1px solid #cbd5e1; }
   .elim-bracket { background:#fee2e2; color:#dc2626; border:1px solid #fca5a5; }
 
-  .bracket-round-title {
-    font-size:0.7rem; font-weight:900; text-transform:uppercase; letter-spacing:1.5px;
-    color:var(--muted); margin:18px 0 8px;
+  /* BRACKET TREE */
+  #bracketScroll {
+    overflow: auto;
+    background: #111827;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #1f2937;
   }
-  .bracket-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:8px; margin-bottom:4px; }
-  .bracket-match {
-    background:var(--card); border:1px solid var(--border); border-radius:10px;
-    overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  .bracket-tree {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    min-width: 1100px;
   }
-  .bracket-match-header { font-size:0.62rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--muted); padding:5px 10px; background:var(--card2); border-bottom:1px solid var(--border); }
-  .bracket-team {
-    display:flex; align-items:center; gap:8px; padding:8px 10px;
-    font-size:0.84rem; font-weight:700; border-bottom:1px solid var(--border);
+  .bracket-half {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex: 1;
   }
-  .bracket-team:last-child { border-bottom:none; }
-  .bracket-team.potential-team { color:#94a3b8; }
-  .bracket-team.elim-team { color:#dc2626; opacity:0.6; }
-  .bracket-team.elim-team .bt-name { text-decoration:line-through; }
-  .bracket-team.winner-team { background:#f0fdf4; }
-  .bt-name { flex:1; }
-  .bt-owner { font-size:0.65rem; font-weight:800; padding:2px 6px; border-radius:8px; }
-  .bt-score { font-family:'Trebuchet MS',sans-serif; font-weight:900; font-size:1rem; min-width:20px; text-align:right; }
+  .bracket-half.right-half {
+    flex-direction: row-reverse;
+  }
+  .bracket-round {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    min-width: 160px;
+  }
+  .bracket-round.r32 { gap: 6px; }
+  .bracket-round.r16 { gap: 52px; }
+  .bracket-round.qf  { gap: 148px; }
+  .bracket-round.sf  { gap: 340px; }
+
+  .bm {
+    background: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 150px;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .bm.confirmed-match { border-color: #3b82f6; }
+  .bm-label {
+    font-size: 0.55rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1px; color: #6b7280; padding: 3px 7px;
+    background: #111827; border-bottom: 1px solid #374151;
+  }
+  .bm-team {
+    display: flex; align-items: center; gap: 5px;
+    padding: 5px 7px; font-size: 0.73rem; font-weight: 700;
+    color: #e5e7eb; border-bottom: 1px solid #1f2937;
+    min-height: 26px;
+  }
+  .bm-team:last-child { border-bottom: none; }
+  .bm-team.tbd { color: #4b5563; font-style: italic; font-weight: 400; }
+  .bm-team.potential { color: #6b7280; }
+  .bm-team.eliminated { opacity: 0.4; }
+  .bm-team.eliminated .bmt-name { text-decoration: line-through; }
+  .bm-team.winner { background: rgba(59,130,246,0.1); }
+  .bmt-flag {
+    font-size: 0.6rem; background: #374151; border-radius: 3px;
+    padding: 1px 4px; min-width: 22px; text-align: center; color: #9ca3af;
+  }
+  .bmt-name { flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .bmt-owner {
+    font-size: 0.55rem; font-weight: 800; padding: 1px 4px;
+    border-radius: 5px; white-space: nowrap; flex-shrink: 0;
+  }
+
+  /* CONNECTORS */
+  .bracket-connectors {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 20px;
+    align-self: stretch;
+    flex-shrink: 0;
+  }
+  .conn-pair { flex: 1; position: relative; }
+  .conn-pair::before, .conn-pair::after {
+    content: ''; position: absolute;
+    background: #374151;
+  }
+  .conn-pair::before {
+    width: 10px; height: 1px;
+    left: 0; top: 25%;
+  }
+  .conn-pair::after {
+    width: 10px; height: 1px;
+    left: 0; bottom: 25%;
+  }
+
+  /* FINAL/TROPHY */
+  .bracket-center {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; padding: 0 16px; flex-shrink: 0;
+  }
+  .bracket-trophy { font-size: 2.5rem; margin-bottom: 8px; }
+  .bracket-final-label {
+    font-size: 0.65rem; font-weight: 900; text-transform: uppercase;
+    letter-spacing: 2px; color: #F5C518; text-align: center; margin-bottom: 8px;
+  }
+  .bracket-final-match {
+    background: #1f2937; border: 2px solid #F5C518;
+    border-radius: 8px; overflow: hidden; width: 150px;
+    box-shadow: 0 0 20px rgba(245,197,24,0.2);
+  }
 
   /* 3RD PLACE TABLE */
   .tp-through { background:#dcfce7; color:#16a34a; border:1px solid #86efac; padding:2px 8px; border-radius:8px; font-size:0.7rem; font-weight:800; }
@@ -418,11 +505,17 @@
   <div id="bracket" class="page">
     <div class="section-title">Knock-out Schema</div>
     <div class="bracket-legend">
-      <span class="bl-item confirmed">Bevestigd</span>
-      <span class="bl-item potential">Mogelijk</span>
+      <span class="bl-item confirmed">Bevestigd gekwalificeerd</span>
+      <span class="bl-item potential">Huidige positie (niet bevestigd)</span>
       <span class="bl-item elim-bracket">Uitgeschakeld</span>
     </div>
-    <div id="bracketContainer"></div>
+    <div id="bracketScroll">
+      <div id="bracketContainer"></div>
+    </div>
+    <p style="font-size:0.72rem;color:var(--muted);margin-top:8px;">
+      Scroll links/rechts/omhoog/omlaag om het volledige schema te zien ·
+      <strong style="color:#F5C518">Finale: 19 juli · MetLife Stadium, New Jersey</strong>
+    </p>
   </div>
 
   <!-- YOUR HUB (personal dashboard) -->
@@ -595,9 +688,7 @@ function getTeamStatus(teamName) {
 
   const remainingGames = 3 - teamRow.played;
 
-  // Qualified: if played 3/3 and in top 2 -> qualified directly
-  // 3rd place -> pending (best-3rd-place wildcard not yet decided)
-  // 4th place -> eliminated
+  // --- After all 3 games played ---
   if (teamRow.played === 3) {
     const idx = tbl.findIndex(r => r.team === teamName);
     if (idx < 2) return 'qualified';
@@ -605,19 +696,38 @@ function getTeamStatus(teamName) {
     return 'eliminated_group';
   }
 
-  // Early qualification: max possible points for teams below vs current points
-  if (remainingGames > 0) {
-    const maxAdditional = remainingGames * 3;
-    // crude early elimination: if mathematically cannot reach top 3 even with max points
-    const maxPossible = teamRow.pts + maxAdditional;
-    const teamsThatCanBeatMax = tbl.filter(r => r.team !== teamName && r.pts > maxPossible).length;
-    if (teamsThatCanBeatMax >= 3) return 'eliminated_group';
+  // --- Early elimination checks (after 1 or 2 games) ---
+  const maxPossible = teamRow.pts + remainingGames * 3;
 
-    // crude early qualification: pts already higher than what 3rd+4th place can reach even with max
+  // Hard mathematical elimination: 3 or more teams already have more points
+  // than we can ever reach (can't finish top 3 even as wildcard)
+  const teamsThatAlreadyBeatMax = tbl.filter(r => r.team !== teamName && r.pts > maxPossible).length;
+  if (teamsThatAlreadyBeatMax >= 3) return 'eliminated_group';
+
+  // After 2 games: check if team is in 4th and the 3rd-place team
+  // already beat them head-to-head (FIFA uses H2H as first tiebreaker).
+  // If team has 0 pts after 2 games and 3rd place team has ≥ 3 pts,
+  // even winning game 3 to get 3 pts won't help — 3rd place team already
+  // beat us H2H so they rank above us on equal points.
+  if (teamRow.played === 2 && teamRow.pts === 0) {
+    const myMaxPts = 3; // can only get 3 pts max now
+    // Count teams that currently have >= 3 pts OR already beat us H2H
+    const teamsAhead = tbl.filter(r => {
+      if (r.team === teamName) return false;
+      if (r.pts > myMaxPts) return true; // can't catch them
+      if (r.pts === myMaxPts) return true; // tied but they played us already (H2H loss for us)
+      return false;
+    });
+    // If 3 or more teams will finish above us even in best case, we're out
+    if (teamsAhead.length >= 3) return 'eliminated_group';
+  }
+
+  // --- Early qualification: already mathematically certain top 2 ---
+  if (remainingGames > 0) {
     const others = tbl.filter(r => r.team !== teamName);
     const othersCanReach = others.filter(r => {
       const otherRemaining = 3 - r.played;
-      return (r.pts + otherRemaining*3) >= teamRow.pts;
+      return (r.pts + otherRemaining * 3) >= teamRow.pts;
     }).length;
     if (othersCanReach <= 1 && teamRow.played >= 1) return 'qualified';
   }
@@ -880,113 +990,147 @@ function renderThirdPlace() {
 // FIFA 2026 Round of 32 bracket — group winners/runners-up per slot
 // W = Winner, R = Runner-up, T = best 3rd
 // Based on FIFA's published pairing chart
-const R32_SLOTS = [
-  { match:'R32-1',  home:{type:'W',group:'A'}, away:{type:'R',group:'B'} },
-  { match:'R32-2',  home:{type:'W',group:'C'}, away:{type:'R',group:'D'} },
-  { match:'R32-3',  home:{type:'W',group:'E'}, away:{type:'R',group:'F'} },
-  { match:'R32-4',  home:{type:'W',group:'G'}, away:{type:'R',group:'H'} },
-  { match:'R32-5',  home:{type:'W',group:'I'}, away:{type:'R',group:'J'} },
-  { match:'R32-6',  home:{type:'W',group:'K'}, away:{type:'R',group:'L'} },
-  { match:'R32-7',  home:{type:'W',group:'B'}, away:{type:'R',group:'A'} },
-  { match:'R32-8',  home:{type:'W',group:'D'}, away:{type:'R',group:'C'} },
-  { match:'R32-9',  home:{type:'W',group:'F'}, away:{type:'R',group:'E'} },
-  { match:'R32-10', home:{type:'W',group:'H'}, away:{type:'R',group:'G'} },
-  { match:'R32-11', home:{type:'W',group:'J'}, away:{type:'R',group:'I'} },
-  { match:'R32-12', home:{type:'W',group:'L'}, away:{type:'R',group:'K'} },
-  { match:'R32-13', home:{type:'T',group:'1'}, away:{type:'T',group:'2'} },
-  { match:'R32-14', home:{type:'T',group:'3'}, away:{type:'T',group:'4'} },
-  { match:'R32-15', home:{type:'T',group:'5'}, away:{type:'T',group:'6'} },
-  { match:'R32-16', home:{type:'T',group:'7'}, away:{type:'T',group:'8'} },
-];
+// ---------------------------------------------------------
+// BRACKET HELPERS
+// ---------------------------------------------------------
 
-function getSlotTeam(slot) {
-  // Returns { team, data, confirmed } for a bracket slot
-  if (slot.type === 'W' || slot.type === 'R') {
-    const table = computeGroupTable(slot.group);
-    const idx = slot.type === 'W' ? 0 : 1;
-    if (!table[idx]) return null;
-    const teamName = table[idx].team;
-    const data = TEAM_DATA[teamName];
-    // Confirmed if all 3 group games played
-    const allPlayed = table.every(r => r.played === 3);
-    return { team: teamName, data, confirmed: allPlayed };
-  }
-  if (slot.type === 'T') {
-    // Best 3rd place slots — compute ranking
-    const thirds = ALL_GROUPS.map(group => {
-      const table = computeGroupTable(group);
-      if (table.length < 3) return null;
-      const t = table[2];
-      return { team: t.team, group, pts: t.pts, gd: t.gd, gf: t.gf, played: t.played, data: TEAM_DATA[t.team] };
-    }).filter(Boolean).sort((a,b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
-
-    const rank = parseInt(slot.group) - 1; // slot.group = '1'..'8'
-    if (!thirds[rank]) return null;
-    const allGroupsComplete = ALL_GROUPS.every(g => computeGroupTable(g).every(r => r.played === 3));
-    return { team: thirds[rank].team, data: thirds[rank].data, confirmed: allGroupsComplete };
-  }
-  return null;
+// Get team info for a group slot (Winner/Runner-up/3rd)
+function getGroupSlotTeam(type, group) {
+  const table = computeGroupTable(group);
+  const idx = type === 'W' ? 0 : 1;
+  if (!table[idx]) return null;
+  const teamName = table[idx].team;
+  const data = TEAM_DATA[teamName];
+  const confirmed = table.every(r => r.played === 3);
+  return { team: teamName, data, confirmed };
 }
 
-function bracketTeamHTML(slot, result) {
-  const info = getSlotTeam(slot);
-  let name, data, confirmed;
-  if (info) { name = info.team; data = info.data; confirmed = info.confirmed; }
+// Get ranked 3rd place teams
+function getRankedThirds() {
+  return ALL_GROUPS.map(group => {
+    const table = computeGroupTable(group);
+    if (table.length < 3) return null;
+    const t = table[2];
+    return { team: t.team, group, pts: t.pts, gd: t.gd, gf: t.gf, played: t.played, data: TEAM_DATA[t.team] };
+  }).filter(Boolean).sort((a,b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+}
 
-  // Check if eliminated in knockout (from allMatches)
-  let knockedOut = false;
-  if (name && confirmed) {
-    // A team is knocked out if they lost a knockout stage match (status FINISHED)
-    const koMatch = allMatches.find(m =>
-      (m.home === name || m.away === name) &&
-      m.group && m.group.toLowerCase().includes('round') &&
-      m.status === 'FINISHED' &&
-      m.homeScore !== null
-    );
-    if (koMatch) {
-      const won = (koMatch.home === name && koMatch.homeScore > koMatch.awayScore) ||
-                  (koMatch.away === name && koMatch.awayScore > koMatch.homeScore);
-      knockedOut = !won;
-    }
+// Build HTML for a single bracket match card
+function bmHTML(matchNum, team1, team2) {
+  const allGroupsDone = ALL_GROUPS.every(g => computeGroupTable(g).every(r => r.played === 3));
+
+  function teamRow(info, fallback) {
+    if (!info) return `<div class="bm-team tbd">${fallback}</div>`;
+    const { team, data, confirmed } = info;
+    const flag = data ? `<span class="bmt-flag">${data.flag}</span>` : `<span class="bmt-flag">?</span>`;
+    const ownerTag = data ? `<span class="bmt-owner ${OWNER_CLASS[data.owner]||''}">${data.owner}</span>` : '';
+    const isElim = getTeamStatus(team) === 'eliminated_group';
+    const cls = isElim ? 'eliminated' : !confirmed ? 'potential' : '';
+    return `<div class="bm-team ${cls}">${flag}<span class="bmt-name">${team}</span>${ownerTag}</div>`;
   }
 
-  const ownerTag = data ? `<span class="bt-owner ${OWNER_CLASS[data.owner]||''}">${data.owner}</span>` : '';
-  const flag = data ? `<span class="flag">${data.flag}</span>` : '<span class="flag">??</span>';
-  const labelName = name || (slot.type === 'T' ? `Best 3rd #${slot.group}` : `${slot.type === 'W' ? 'Winnaar' : '2e'} Groep ${slot.group}`);
+  const label = matchNum ? `M${matchNum}` : '';
+  return `<div class="bm ${team1?.confirmed && team2?.confirmed ? 'confirmed-match' : ''}">
+    <div class="bm-label">${label}</div>
+    ${teamRow(team1, '...')}
+    ${teamRow(team2, '...')}
+  </div>`;
+}
 
-  let teamClass = '';
-  if (!confirmed) teamClass = 'potential-team';
-  else if (knockedOut) teamClass = 'elim-team';
-
-  return `<div class="bracket-team ${teamClass}">
-    ${flag}
-    <span class="bt-name">${labelName}</span>
-    ${ownerTag}
+// TBD placeholder card
+function tbdHTML(label) {
+  return `<div class="bm">
+    <div class="bm-label">${label}</div>
+    <div class="bm-team tbd">...</div>
+    <div class="bm-team tbd">...</div>
   </div>`;
 }
 
 function renderBracket() {
   const container = document.getElementById('bracketContainer');
 
-  const matchesHTML = R32_SLOTS.map(slot => {
-    const homeInfo = getSlotTeam(slot.home);
-    const awayInfo = getSlotTeam(slot.away);
-    const label = slot.match.replace('R32-', 'Wedstrijd ');
-    return `<div class="bracket-match">
-      <div class="bracket-match-header">Laatste 32 · ${label}</div>
-      ${bracketTeamHTML(slot.home)}
-      ${bracketTeamHTML(slot.away)}
-    </div>`;
-  }).join('');
+  // Pre-compute all group slots
+  const W = g => getGroupSlotTeam('W', g);
+  const R = g => getGroupSlotTeam('R', g);
+  const thirds = getRankedThirds();
+  const T = i => thirds[i] ? { team: thirds[i].team, data: thirds[i].data, confirmed: ALL_GROUPS.every(g => computeGroupTable(g).every(r => r.played === 3)) } : null;
+
+  // FIFA R32 matches (exact match numbers from regulations):
+  // LEFT HALF (top to bottom): M73, M76, M74, M75, M78, M77, M79, M80
+  // RIGHT HALF (top to bottom): M82, M81, M84, M88, M86, M87, M85, M83
+  // Then R16, QF, SF, Final
+
+  // LEFT HALF R32
+  const L = [
+    bmHTML(73,  R('A'), R('B')),
+    bmHTML(76,  W('C'), R('F')),
+    bmHTML(74,  W('E'), T(0)),
+    bmHTML(75,  W('F'), R('C')),
+    bmHTML(78,  R('E'), R('I')),
+    bmHTML(77,  W('I'), T(1)),
+    bmHTML(79,  W('A'), T(2)),
+    bmHTML(80,  W('L'), T(3)),
+  ];
+
+  // RIGHT HALF R32
+  const Rr = [
+    bmHTML(82,  W('G'), T(4)),
+    bmHTML(81,  W('D'), T(5)),
+    bmHTML(84,  W('H'), R('J')),
+    bmHTML(88,  R('D'), R('G')),
+    bmHTML(86,  W('J'), R('H')),
+    bmHTML(87,  W('K'), T(6)),
+    bmHTML(85,  W('B'), T(7)),
+    bmHTML(83,  R('K'), R('L')),
+  ];
+
+  // R16, QF, SF placeholders (TBD until R32 complete)
+  const tbd = () => tbdHTML('TBD');
+
+  const round = (items, cls) => `<div class="bracket-round ${cls}">${items.join('')}</div>`;
+  const spacer = () => `<div style="width:12px;flex-shrink:0"></div>`;
 
   container.innerHTML = `
-    <div class="bracket-round-title">Laatste 32 — start 28 juni</div>
-    <div class="bracket-grid">${matchesHTML}</div>
-    <p style="font-size:0.72rem;color:var(--muted);margin-top:12px;">
-      Grijs = huidige positie, nog niet bevestigd · Blauw = bevestigd gekwalificeerd · 
-      <strong style="color:var(--gold)">Finale: 19 juli · MetLife Stadium, New Jersey</strong>
-    </p>`;
+  <div class="bracket-tree">
+
+    <!-- LEFT HALF -->
+    <div class="bracket-half">
+      ${round(L, 'r32')}
+      ${spacer()}
+      ${round([tbd(),tbd(),tbd(),tbd()], 'r16')}
+      ${spacer()}
+      ${round([tbd(),tbd()], 'qf')}
+      ${spacer()}
+      ${round([tbd()], 'sf')}
+      ${spacer()}
+    </div>
+
+    <!-- CENTRE -->
+    <div class="bracket-center">
+      <div class="bracket-trophy">🏆</div>
+      <div class="bracket-final-label">Finale<br>19 Juli</div>
+      <div class="bracket-final-match">
+        <div class="bm-label" style="background:#1a1a2e;color:#F5C518;border-color:#F5C518">FINALE</div>
+        <div class="bm-team tbd">...</div>
+        <div class="bm-team tbd">...</div>
+      </div>
+    </div>
+
+    <!-- RIGHT HALF -->
+    <div class="bracket-half right-half">
+      ${round(Rr, 'r32')}
+      ${spacer()}
+      ${round([tbd(),tbd(),tbd(),tbd()], 'r16')}
+      ${spacer()}
+      ${round([tbd(),tbd()], 'qf')}
+      ${spacer()}
+      ${round([tbd()], 'sf')}
+      ${spacer()}
+    </div>
+
+  </div>`;
 }
+
 
 // ---------------------------------------------------------
 // FILTERING
