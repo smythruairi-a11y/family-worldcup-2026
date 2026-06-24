@@ -274,31 +274,56 @@
     border: 1px solid #374151;
     border-radius: 8px;
     overflow: hidden;
-    width: 150px;
+    width: 158px;
     flex-shrink: 0;
     position: relative;
   }
-  .bm.confirmed-match { border-color: #3b82f6; }
+  .bm.confirmed-match {
+    border-color: #22c55e;
+    box-shadow: 0 0 8px rgba(34,197,94,0.2);
+  }
   .bm-label {
     font-size: 0.55rem; font-weight: 800; text-transform: uppercase;
     letter-spacing: 1px; color: #6b7280; padding: 3px 7px;
     background: #111827; border-bottom: 1px solid #374151;
   }
+  .bm.confirmed-match .bm-label {
+    color: #22c55e;
+    background: #0f1f14;
+    border-bottom-color: #166534;
+  }
+
+  /* DEFAULT = confirmed (bright white) */
   .bm-team {
     display: flex; align-items: center; gap: 5px;
-    padding: 5px 7px; font-size: 0.73rem; font-weight: 700;
-    color: #e5e7eb; border-bottom: 1px solid #1f2937;
-    min-height: 26px;
+    padding: 5px 7px; font-size: 0.73rem; font-weight: 800;
+    color: #f9fafb; border-bottom: 1px solid #374151;
+    min-height: 28px;
   }
   .bm-team:last-child { border-bottom: none; }
-  .bm-team.tbd { color: #4b5563; font-style: italic; font-weight: 400; }
-  .bm-team.potential { color: #6b7280; }
-  .bm-team.eliminated { opacity: 0.4; }
-  .bm-team.eliminated .bmt-name { text-decoration: line-through; }
-  .bm-team.winner { background: rgba(59,130,246,0.1); }
+  .bm-team.tbd { color: #374151; font-style: italic; font-weight: 400; }
+
+  /* POTENTIAL = grey, dimmed, italic */
+  .bm-team.potential {
+    color: #6b7280;
+    font-weight: 500;
+    font-style: italic;
+    background: #161e2a;
+  }
+  .bm-team.potential .bmt-flag { background: #1f2937; color: #4b5563; }
+  .bm-team.potential .bmt-owner { opacity: 0.6; }
+
+  /* ELIMINATED = strikethrough red */
+  .bm-team.eliminated {
+    opacity: 0.45;
+    background: #2d1515;
+  }
+  .bm-team.eliminated .bmt-name { text-decoration: line-through; color: #ef4444; }
+  .bm-team.eliminated .bmt-flag { background: #3d1818; color: #ef4444; }
+
   .bmt-flag {
     font-size: 0.6rem; background: #374151; border-radius: 3px;
-    padding: 1px 4px; min-width: 22px; text-align: center; color: #9ca3af;
+    padding: 1px 4px; min-width: 22px; text-align: center; color: #d1d5db; font-weight: 700;
   }
   .bmt-name { flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
   .bmt-owner {
@@ -1025,7 +1050,10 @@ function bmHTML(matchNum, team1, team2) {
     const flag = data ? `<span class="bmt-flag">${data.flag}</span>` : `<span class="bmt-flag">?</span>`;
     const ownerTag = data ? `<span class="bmt-owner ${OWNER_CLASS[data.owner]||''}">${data.owner}</span>` : '';
     const isElim = getTeamStatus(team) === 'eliminated_group';
-    const cls = isElim ? 'eliminated' : !confirmed ? 'potential' : '';
+    let cls = '';
+    if (isElim) cls = 'eliminated';
+    else if (!confirmed) cls = 'potential';
+    // confirmed + not eliminated = no class = bright white (default)
     return `<div class="bm-team ${cls}">${flag}<span class="bmt-name">${team}</span>${ownerTag}</div>`;
   }
 
