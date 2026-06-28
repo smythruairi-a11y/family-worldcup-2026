@@ -455,7 +455,7 @@
       <div class="legend-item"><span class="ldot t4"></span>Pot 4 — Underdogs</div>
     </div>
     <div class="legend" style="margin-top:-8px">
-      <div class="legend-item"><span class="qual-badge">Q</span> = Qualified directly (top 2)</div>
+      <div class="legend-item"><span class="qual-badge">Q</span> = Door naar knock-out fase</div>
       <div class="legend-item"><span class="qual-badge pending-badge">3rd?</span> = 3rd place — may qualify as best-3rd wildcard</div>
       <div class="legend-item">Strikethrough = Eliminated</div>
     </div>
@@ -692,61 +692,90 @@ function computeGroupTable(group) {
 // A team is eliminated if mathematically impossible to reach top 2
 // (simplified: if played all 3 group games and not top 2 by points, OR
 //  cannot catch up even with max remaining points)
+// ---------------------------------------------------------
+// TEAM STATUS — hardcoded from real results
+// Update this after each round completes
+// Status: 'qualified' | 'eliminated_group' | 'eliminated_ko' | 'active' | 'pending'
+// ---------------------------------------------------------
+const TEAM_STATUS_OVERRIDE = {
+  // ── GROUP STAGE ELIMINATED ──
+  'Haiti':              'eliminated_group',
+  'Türkiye':           'eliminated_group',
+  'Qatar':              'eliminated_group',
+  'Tunisia':            'eliminated_group',
+  'Jordan':             'eliminated_group',
+  'Panama':             'eliminated_group',
+  'Curaçao':            'eliminated_group',
+  'New Zealand':        'eliminated_group',
+  'Uruguay':            'eliminated_group',
+  'South Korea':        'eliminated_group',
+  'Czechia':            'eliminated_group',
+  'Iraq':               'eliminated_group',
+  'Scotland':           'eliminated_group',
+
+  // ── THROUGH TO R32 (confirmed) ──
+  // Group A
+  'Mexico':             'qualified',
+  'South Africa':       'qualified',
+  // Group B
+  'Switzerland':        'qualified',
+  'Canada':             'qualified',
+  // Group C
+  'Brazil':             'qualified',
+  'Morocco':            'qualified',
+  // Group D
+  'United States':      'qualified',
+  'Australia':          'qualified',
+  // Group E
+  'Germany':            'qualified',
+  'Ivory Coast':        'qualified',
+  // Group F
+  'Netherlands':        'qualified',
+  'Japan':              'qualified',
+  // Group G
+  'Belgium':            'qualified',
+  'Egypt':              'qualified',
+  // Group H
+  'Spain':              'qualified',
+  'Cape Verde':         'qualified',
+  // Group I
+  'France':             'qualified',
+  'Norway':             'qualified',
+  // Group J
+  'Argentina':          'qualified',
+  'Austria':            'qualified',
+  // Group K
+  'Colombia':           'qualified',
+  'Portugal':           'qualified',
+  // Group L
+  'England':            'qualified',
+  'Croatia':            'qualified',
+  // Best 3rd place teams (8 of 12)
+  'Paraguay':           'qualified',
+  'Ecuador':            'qualified',
+  'Sweden':             'qualified',
+  'Bosnia-Herzegovina': 'qualified',
+  'Senegal':            'qualified',
+  'Ghana':              'qualified',
+  'Algeria':            'qualified',
+  'DR Congo':           'qualified',
+  // 3rd place teams that did NOT qualify
+  'Iran':               'eliminated_group',
+  'South Africa':       'qualified', // already listed above
+};
+
 function getTeamStatus(teamName) {
-  const data = TEAM_DATA[teamName];
-  if (!data) return 'unknown';
-  const tbl = computeGroupTable(data.group);
-  const teamRow = tbl.find(r => r.team === teamName);
-  if (!teamRow) return 'active';
-
-  const remainingGames = 3 - teamRow.played;
-
-  // --- After all 3 games played ---
-  if (teamRow.played === 3) {
-    const idx = tbl.findIndex(r => r.team === teamName);
-    if (idx < 2) return 'qualified';
-    if (idx === 2) return 'pending';
-    return 'eliminated_group';
-  }
-
-  // --- Early elimination checks (after 1 or 2 games) ---
-  const maxPossible = teamRow.pts + remainingGames * 3;
-
-  // Hard mathematical elimination: 3 or more teams already have more points
-  // than we can ever reach (can't finish top 3 even as wildcard)
-  const teamsThatAlreadyBeatMax = tbl.filter(r => r.team !== teamName && r.pts > maxPossible).length;
-  if (teamsThatAlreadyBeatMax >= 3) return 'eliminated_group';
-
-  // After 2 games: check if team is in 4th and the 3rd-place team
-  // already beat them head-to-head (FIFA uses H2H as first tiebreaker).
-  // If team has 0 pts after 2 games and 3rd place team has ≥ 3 pts,
-  // even winning game 3 to get 3 pts won't help — 3rd place team already
-  // beat us H2H so they rank above us on equal points.
-  if (teamRow.played === 2 && teamRow.pts === 0) {
-    const myMaxPts = 3; // can only get 3 pts max now
-    // Count teams that currently have >= 3 pts OR already beat us H2H
-    const teamsAhead = tbl.filter(r => {
-      if (r.team === teamName) return false;
-      if (r.pts > myMaxPts) return true; // can't catch them
-      if (r.pts === myMaxPts) return true; // tied but they played us already (H2H loss for us)
-      return false;
-    });
-    // If 3 or more teams will finish above us even in best case, we're out
-    if (teamsAhead.length >= 3) return 'eliminated_group';
-  }
-
-  // --- Early qualification: already mathematically certain top 2 ---
-  if (remainingGames > 0) {
-    const others = tbl.filter(r => r.team !== teamName);
-    const othersCanReach = others.filter(r => {
-      const otherRemaining = 3 - r.played;
-      return (r.pts + otherRemaining * 3) >= teamRow.pts;
-    }).length;
-    if (othersCanReach <= 1 && teamRow.played >= 1) return 'qualified';
-  }
-
+  // Check override first
+  const override = TEAM_STATUS_OVERRIDE[teamName];
+  if (override) return override;
+  // Also check via alias resolution
+  const canonical = normalizeTeamName(teamName);
+  const overrideCanon = TEAM_STATUS_OVERRIDE[canonical];
+  if (overrideCanon) return overrideCanon;
+  // Default: still active (group stage in progress)
   return 'active';
 }
+
 
 // ---------------------------------------------------------
 // RENDER: TODAY'S GAMES (grouped by day)
@@ -1029,27 +1058,30 @@ function getRankedThirds() {
 }
 
 // Build HTML for a single bracket match card
-function bmHTML(matchNum, team1, team2) {
-  const allGroupsDone = ALL_GROUPS.every(g => computeGroupTable(g).every(r => r.played === 3));
-
-  function teamRow(info, fallback) {
-    if (!info) return `<div class="bm-team tbd">${fallback}</div>`;
+function bmHTML(matchNum, team1, team2, date) {
+  function teamRow(info) {
+    if (!info || !info.data) {
+      // TBD slot — show match reference text
+      const label = info ? info.team : '...';
+      return `<div class="bm-team tbd">${label}</div>`;
+    }
     const { team, data, confirmed } = info;
-    const flag = data ? `<span class="bmt-flag">${data.flag}</span>` : `<span class="bmt-flag">?</span>`;
-    const ownerTag = data ? `<span class="bmt-owner ${OWNER_CLASS[data.owner]||''}">${data.owner}</span>` : '';
+    const flag = `<span class="bmt-flag">${data.flag}</span>`;
+    const ownerTag = `<span class="bmt-owner ${OWNER_CLASS[data.owner]||''}">${data.owner}</span>`;
     const isElim = getTeamStatus(team) === 'eliminated_group';
     let cls = '';
     if (isElim) cls = 'eliminated';
     else if (!confirmed) cls = 'potential';
-    // confirmed + not eliminated = no class = bright white (default)
     return `<div class="bm-team ${cls}">${flag}<span class="bmt-name">${team}</span>${ownerTag}</div>`;
   }
 
-  const label = matchNum ? `M${matchNum}` : '';
-  return `<div class="bm ${team1?.confirmed && team2?.confirmed ? 'confirmed-match' : ''}">
+  const bothConfirmed = team1?.confirmed && team2?.confirmed;
+  const dateStr = date ? ` · ${date}` : '';
+  const label = matchNum ? `M${matchNum}${dateStr}` : '';
+  return `<div class="bm ${bothConfirmed ? 'confirmed-match' : ''}">
     <div class="bm-label">${label}</div>
-    ${teamRow(team1, '...')}
-    ${teamRow(team2, '...')}
+    ${teamRow(team1)}
+    ${teamRow(team2)}
   </div>`;
 }
 
@@ -1065,83 +1097,105 @@ function tbdHTML(label) {
 function renderBracket() {
   const container = document.getElementById('bracketContainer');
 
-  // Pre-compute all group slots
-  const W = g => getGroupSlotTeam('W', g);
-  const R = g => getGroupSlotTeam('R', g);
-  const thirds = getRankedThirds();
-  const T = i => thirds[i] ? { team: thirds[i].team, data: thirds[i].data, confirmed: ALL_GROUPS.every(g => computeGroupTable(g).every(r => r.played === 3)) } : null;
+  // Look up a confirmed R32 team by name
+  const named = (teamName) => {
+    const data = lookupTeam(teamName);
+    if (!data) { console.warn('named(): no data for', teamName); return null; }
+    return { team: teamName, data, confirmed: true };
+  };
 
-  // FIFA R32 matches (exact match numbers from regulations):
-  // LEFT HALF (top to bottom): M73, M76, M74, M75, M78, M77, M79, M80
-  // RIGHT HALF (top to bottom): M82, M81, M84, M88, M86, M87, M85, M83
-  // Then R16, QF, SF, Final
+  // TBD slot — winner of a previous match
+  const wm = (n) => ({ team: `W M${n}`, data: null, confirmed: false });
 
-  // LEFT HALF R32
-  const L = [
-    bmHTML(73,  R('A'), R('B')),
-    bmHTML(76,  W('C'), R('F')),
-    bmHTML(74,  W('E'), T(0)),
-    bmHTML(75,  W('F'), R('C')),
-    bmHTML(78,  R('E'), R('I')),
-    bmHTML(77,  W('I'), T(1)),
-    bmHTML(79,  W('A'), T(2)),
-    bmHTML(80,  W('L'), T(3)),
+  // ---- R32 MATCHES (official FIFA pairings) ----
+  // LEFT HALF (top → bottom, feeds into left tree)
+  const m74 = bmHTML(74, named('Germany'),       named('Paraguay'),           '29 jun');
+  const m77 = bmHTML(77, named('France'),        named('Sweden'),             '30 jun');
+  const m73 = bmHTML(73, named('South Africa'),  named('Canada'),             '28 jun');
+  const m75 = bmHTML(75, named('Netherlands'),   named('Morocco'),            '30 jun');
+  const m83 = bmHTML(83, named('Portugal'),      named('Croatia'),            '3 jul');
+  const m84 = bmHTML(84, named('Spain'),         named('Austria'),            '2 jul');
+  const m81 = bmHTML(81, named('United States'), named('Bosnia-Herzegovina'), '2 jul');
+  const m82 = bmHTML(82, named('Belgium'),       named('Senegal'),            '1 jul');
+
+  // RIGHT HALF (top → bottom, feeds into right tree)
+  const m76 = bmHTML(76, named('Brazil'),        named('Japan'),              '29 jun');
+  const m78 = bmHTML(78, named('Ivory Coast'),   named('Norway'),             '30 jun');
+  const m79 = bmHTML(79, named('Mexico'),        named('Ecuador'),            '1 jul');
+  const m80 = bmHTML(80, named('England'),       named('DR Congo'),           '1 jul');
+  const m86 = bmHTML(86, named('Argentina'),     named('Cape Verde'),         '4 jul');
+  const m88 = bmHTML(88, named('Australia'),     named('Egypt'),              '3 jul');
+  const m85 = bmHTML(85, named('Switzerland'),   named('Algeria'),            '3 jul');
+  const m87 = bmHTML(87, named('Colombia'),      named('Ghana'),              '4 jul');
+
+  // ---- R16 (official pairings from Wikipedia) ----
+  // LEFT half R16: W74 vs W77 → M89; W73 vs W75 → M90; W83 vs W84 → M93; W81 vs W82 → M94
+  const r16L = [
+    bmHTML(89, wm(74), wm(77), '4 jul'),
+    bmHTML(90, wm(73), wm(75), '4 jul'),
+    bmHTML(93, wm(83), wm(84), '6 jul'),
+    bmHTML(94, wm(81), wm(82), '6 jul'),
+  ];
+  // RIGHT half R16: W76 vs W78 → M91; W79 vs W80 → M92; W86 vs W88 → M95; W85 vs W87 → M96
+  const r16R = [
+    bmHTML(91, wm(76), wm(78), '5 jul'),
+    bmHTML(92, wm(79), wm(80), '5 jul'),
+    bmHTML(95, wm(86), wm(88), '7 jul'),
+    bmHTML(96, wm(85), wm(87), '7 jul'),
   ];
 
-  // RIGHT HALF R32
-  const Rr = [
-    bmHTML(82,  W('G'), T(4)),
-    bmHTML(81,  W('D'), T(5)),
-    bmHTML(84,  W('H'), R('J')),
-    bmHTML(88,  R('D'), R('G')),
-    bmHTML(86,  W('J'), R('H')),
-    bmHTML(87,  W('K'), T(6)),
-    bmHTML(85,  W('B'), T(7)),
-    bmHTML(83,  R('K'), R('L')),
+  // ---- QF ----
+  // LEFT: W89 vs W90 → M97; W93 vs W94 → M98
+  const qfL = [
+    bmHTML(97, wm(89), wm(90), '9 jul'),
+    bmHTML(98, wm(93), wm(94), '10 jul'),
+  ];
+  // RIGHT: W91 vs W92 → M99; W95 vs W96 → M100
+  const qfR = [
+    bmHTML(99,  wm(91), wm(92), '11 jul'),
+    bmHTML(100, wm(95), wm(96), '11 jul'),
   ];
 
-  // R16, QF, SF placeholders (TBD until R32 complete)
-  const tbd = () => tbdHTML('TBD');
+  // ---- SF ----
+  // LEFT: W97 vs W98 → M101
+  const sfL = [bmHTML(101, wm(97), wm(98), '14 jul')];
+  // RIGHT: W99 vs W100 → M102
+  const sfR = [bmHTML(102, wm(99), wm(100), '15 jul')];
+
+  // ---- FINAL ----
+  const finalCard = `<div class="bracket-final-match">
+    <div class="bm-label" style="background:#fffbeb;color:#b45309;border-bottom:1px solid #fde68a;font-weight:900;">M104 · FINALE · 19 jul</div>
+    <div class="bm-team tbd">W M101</div>
+    <div class="bm-team tbd">W M102</div>
+  </div>`;
 
   const round = (items, cls) => `<div class="bracket-round ${cls}">${items.join('')}</div>`;
-  const spacer = () => `<div style="width:12px;flex-shrink:0"></div>`;
+  const sp = `<div style="width:10px;flex-shrink:0"></div>`;
 
   container.innerHTML = `
   <div class="bracket-tree">
 
-    <!-- LEFT HALF -->
+    <!-- LEFT HALF: R32 → R16 → QF → SF → centre -->
     <div class="bracket-half">
-      ${round(L, 'r32')}
-      ${spacer()}
-      ${round([tbd(),tbd(),tbd(),tbd()], 'r16')}
-      ${spacer()}
-      ${round([tbd(),tbd()], 'qf')}
-      ${spacer()}
-      ${round([tbd()], 'sf')}
-      ${spacer()}
+      ${round([m74,m77,m73,m75,m83,m84,m81,m82], 'r32')}${sp}
+      ${round(r16L, 'r16')}${sp}
+      ${round(qfL, 'qf')}${sp}
+      ${round(sfL, 'sf')}${sp}
     </div>
 
-    <!-- CENTRE -->
+    <!-- CENTRE TROPHY -->
     <div class="bracket-center">
       <div class="bracket-trophy">🏆</div>
       <div class="bracket-final-label">Finale<br>19 Juli</div>
-      <div class="bracket-final-match">
-        <div class="bm-label" style="background:#1a1a2e;color:#F5C518;border-color:#F5C518">FINALE</div>
-        <div class="bm-team tbd">...</div>
-        <div class="bm-team tbd">...</div>
-      </div>
+      ${finalCard}
     </div>
 
-    <!-- RIGHT HALF -->
+    <!-- RIGHT HALF: SF → QF → R16 → R32 -->
     <div class="bracket-half right-half">
-      ${round(Rr, 'r32')}
-      ${spacer()}
-      ${round([tbd(),tbd(),tbd(),tbd()], 'r16')}
-      ${spacer()}
-      ${round([tbd(),tbd()], 'qf')}
-      ${spacer()}
-      ${round([tbd()], 'sf')}
-      ${spacer()}
+      ${round([m76,m78,m79,m80,m86,m88,m85,m87], 'r32')}${sp}
+      ${round(r16R, 'r16')}${sp}
+      ${round(qfR, 'qf')}${sp}
+      ${round(sfR, 'sf')}${sp}
     </div>
 
   </div>`;
