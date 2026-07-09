@@ -568,7 +568,7 @@
 // CONFIG — paste your published CSV URL here
 // =========================================================
 // Primary: Google Apps Script web app (serves CSV with proper CORS headers)
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEf4QAsSDAP5CGZcIuHqbMUKJU4AgXvtEXmzK0L14MAYZPqJ7y6wFD4xtVJJ-RiYJP/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzIt8BcniHMk8BeHsR7aZUjE_Q1SKKbh29rWsKSo2yAoSzgXYOdCmwVvU6oq32WtJkr/exec";
 // Fallback: published sheet CSV (may hit CORS), optionally via proxy
 const MATCHES_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRMSwx5xskz1svT0fFLy5sFzNq6N5hqIx_ZLxmFgWYESisXs5H0dBipecSAS-TZFMWJ013VwISIs_NW/pub?output=csv";
 
@@ -629,30 +629,80 @@ function normalizeTeamName(name) {
   return name;
 }
 
+
+// ---------------------------------------------------------
+// JSONP LOADER — bypasses CORS entirely by using a <script> tag
+// ---------------------------------------------------------
+function jsonpFetch(baseUrl, timeoutMs) {
+  timeoutMs = timeoutMs || 10000;
+  return new Promise((resolve, reject) => {
+    const cbName = 'wcCb_' + Math.random().toString(36).slice(2);
+    const script = document.createElement('script');
+    let settled = false;
+
+    function cleanup() {
+      try { delete window[cbName]; } catch (_) { window[cbName] = undefined; }
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+    const timer = setTimeout(() => {
+      if (settled) return;
+      settled = true; cleanup(); reject(new Error('JSONP timeout'));
+    }, timeoutMs);
+
+    window[cbName] = (data) => {
+      if (settled) return;
+      settled = true; clearTimeout(timer); cleanup(); resolve(data);
+    };
+    script.onerror = () => {
+      if (settled) return;
+      settled = true; clearTimeout(timer); cleanup(); reject(new Error('JSONP load error'));
+    };
+
+    const sep = baseUrl.indexOf('?') === -1 ? '?' : '&';
+    script.src = baseUrl + sep + 'callback=' + cbName + '&t=' + Date.now();
+    document.head.appendChild(script);
+  });
+}
+
 // ---------------------------------------------------------
 // FETCH MATCH DATA
 // ---------------------------------------------------------
 async function fetchMatches() {
   try {
-    // Try each data source until one works
-    let text = null;
+    // --- Get rows: JSONP first (immune to CORS), then CSV fallbacks ---
+    let rows = null;
     let lastErr = null;
-    for (const url of getDataSources()) {
-      try {
-        const res = await fetch(url);
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const body = await res.text();
-        // Sanity check: must look like our CSV
-        if (body && body.indexOf('Home Team') !== -1) { text = body; break; }
-        throw new Error('unexpected response shape');
-      } catch (e) {
-        lastErr = e;
-        console.warn('Data source failed:', url.split('?')[0], e.message);
+
+    // 1) JSONP via Apps Script — loaded as a <script>, so CORS never applies
+    try {
+      const data = await jsonpFetch(APPS_SCRIPT_URL);
+      if (Array.isArray(data) && data.length && data[0].indexOf('Home Team') !== -1) {
+        rows = data;
+      } else {
+        throw new Error('unexpected JSONP shape');
+      }
+    } catch (e) {
+      lastErr = e;
+      console.warn('JSONP source failed:', e.message);
+    }
+
+    // 2) CSV fallbacks
+    if (!rows) {
+      for (const url of getDataSources()) {
+        try {
+          const res = await fetch(url);
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const body = await res.text();
+          if (body && body.indexOf('Home Team') !== -1) { rows = parseCSV(body); break; }
+          throw new Error('unexpected response shape');
+        } catch (e) {
+          lastErr = e;
+          console.warn('Data source failed:', url.split('?')[0], e.message);
+        }
       }
     }
-    if (!text) throw (lastErr || new Error('all data sources failed'));
 
-    const rows = parseCSV(text);
+    if (!rows) throw (lastErr || new Error('all data sources failed'));
     const headers = rows[0].map(h => h.trim());
     const idx = {
       date: headers.indexOf('Date'),
