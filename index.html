@@ -567,7 +567,21 @@
 // =========================================================
 // CONFIG — paste your published CSV URL here
 // =========================================================
+// Primary: Google Apps Script web app (serves CSV with proper CORS headers)
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEf4QAsSDAP5CGZcIuHqbMUKJU4AgXvtEXmzK0L14MAYZPqJ7y6wFD4xtVJJ-RiYJP/exec";
+// Fallback: published sheet CSV (may hit CORS), optionally via proxy
 const MATCHES_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRMSwx5xskz1svT0fFLy5sFzNq6N5hqIx_ZLxmFgWYESisXs5H0dBipecSAS-TZFMWJ013VwISIs_NW/pub?output=csv";
+
+// Try each source in order until one returns usable CSV
+function getDataSources() {
+  const t = Date.now();
+  return [
+    APPS_SCRIPT_URL + '?t=' + t,
+    'https://api.allorigins.win/raw?url=' + encodeURIComponent(MATCHES_CSV_URL + '&t=' + t),
+    'https://corsproxy.io/?' + encodeURIComponent(MATCHES_CSV_URL + '&t=' + t),
+    MATCHES_CSV_URL + '&t=' + t
+  ];
+}
 const REFRESH_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 
 let activeOwner = 'all';
@@ -620,10 +634,24 @@ function normalizeTeamName(name) {
 // ---------------------------------------------------------
 async function fetchMatches() {
   try {
-    // Use CORS proxy since Google Sheets redirects to googleusercontent.com
-    const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(MATCHES_CSV_URL + '&t=' + Date.now());
-    const res = await fetch(proxyUrl);
-    const text = await res.text();
+    // Try each data source until one works
+    let text = null;
+    let lastErr = null;
+    for (const url of getDataSources()) {
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const body = await res.text();
+        // Sanity check: must look like our CSV
+        if (body && body.indexOf('Home Team') !== -1) { text = body; break; }
+        throw new Error('unexpected response shape');
+      } catch (e) {
+        lastErr = e;
+        console.warn('Data source failed:', url.split('?')[0], e.message);
+      }
+    }
+    if (!text) throw (lastErr || new Error('all data sources failed'));
+
     const rows = parseCSV(text);
     const headers = rows[0].map(h => h.trim());
     const idx = {
@@ -650,9 +678,9 @@ async function fetchMatches() {
       'Last refreshed ' + new Date().toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'}) + ' · ' + allMatches.length + ' matches loaded';
     renderAll();
   } catch (err) {
-    document.getElementById('lastUpdated').textContent = 'Could not load live data — showing cached view';
+    document.getElementById('lastUpdated').textContent = 'Kon live data niet laden — toont gecachte versie';
     document.getElementById('matchesContainer').innerHTML =
-      '<div class="loading">⚠️ Could not reach the data sheet.<br>Check the CSV publish link is still active.</div>';
+      '<div class="loading">⚠️ Kon de gegevensbron niet bereiken.<br>Probeer de pagina te vernieuwen.</div>';
     console.error(err);
   }
 }
