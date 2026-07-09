@@ -620,7 +620,9 @@ function normalizeTeamName(name) {
 // ---------------------------------------------------------
 async function fetchMatches() {
   try {
-    const res = await fetch(MATCHES_CSV_URL + '&t=' + Date.now());
+    // Use CORS proxy since Google Sheets redirects to googleusercontent.com
+    const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(MATCHES_CSV_URL + '&t=' + Date.now());
+    const res = await fetch(proxyUrl);
     const text = await res.text();
     const rows = parseCSV(text);
     const headers = rows[0].map(h => h.trim());
